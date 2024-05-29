@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  accountId   Int        @id(map: "PK_Account") @default(autoincrement())
+  email       String?    @db.VarChar(Max)
+  password    String?    @db.VarChar(Max)
+  facebookURL String?    @db.VarChar(Max)
+  facebookId  String?    @db.VarChar(Max)
+  roleId      Int?
+  createdDate DateTime?  @default(now(), map: "DF_Account_createdDate") @db.DateTime
+  Role        Role?      @relation(fields: [roleId], references: [roleId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Account_Role")
+  Post        Post[]
+  PostView    PostView[]
+}
+
+model Category {
+  categoryId   Int     @id(map: "PK_Category") @default(autoincrement())
+  categoryName String? @db.NVarChar(100)
+}
+
+model Post {
+  postId      Int        @id(map: "PK_Post") @default(autoincrement())
+  title       String?    @db.NVarChar(Max)
+  imageURL    String?    @db.VarChar(Max)
+  content     String?    @db.NVarChar(Max)
+  createdDate DateTime?  @default(now(), map: "DF_Post_createdDate") @db.DateTime
+  createdBy   Int?
+  categoryId  Int?
+  Account     Account?   @relation(fields: [createdBy], references: [accountId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Account")
+  PostTag     PostTag[]
+  PostView    PostView[]
+}
+
+model PostTag {
+  postId Int
+  tagId  Int
+  Post   Post @relation(fields: [postId], references: [postId], onUpdate: NoAction, map: "FK_PostTag_Post")
+  Tag    Tag  @relation(fields: [tagId], references: [tagId], onUpdate: NoAction, map: "FK_PostTag_Tag")
+
+  @@id([postId, tagId], map: "PK_PostTag")
+}
+
+model Role {
+  roleId   Int       @id(map: "PK_Role") @default(autoincrement())
+  roleName String?   @db.VarChar(50)
+  Account  Account[]
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B61AF87DA37") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model Tag {
+  tagId   Int       @id(map: "PK_Tag") @default(autoincrement())
+  tagName String?   @db.NVarChar(100)
+  PostTag PostTag[]
+}
+
+model PostView {
+  postId    Int
+  accountId Int
+  viewDate  DateTime? @default(now(), map: "DF_PostView_viewDate") @db.DateTime
+  Account   Account   @relation(fields: [accountId], references: [accountId], onUpdate: NoAction, map: "FK_PostView_Account")
+  Post      Post      @relation(fields: [postId], references: [postId], onUpdate: NoAction, map: "FK_PostView_Post")
+
+  @@id([postId, accountId], map: "PK_PostView")
+}
