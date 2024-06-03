@@ -1,10 +1,16 @@
 import { Request, Response } from "express";
-import { addManyPosts, addTagToPost, deletePost, editPost, getAllPost, getPostByCategory, getPostByTag, readFileExcelPost } from "../services/PostService"
+import { addManyPosts, addTagToPost, deletePost, editPost, getAllPost, getPostByCategory, getPostById, getPostByTag, readFileExcelPost } from "../services/PostService"
 import { Post } from "@prisma/client";
 
 export const getPosts = async (req: Request, res: Response) => {
     const result = await getAllPost()
     res.status(200).json(result);
+}
+
+export const getPtById = async (req:Request, res:Response) => {
+    const id = req.params.id
+    const result = await getPostById(parseInt(id))
+    res.status(200).json(result)
 }
 
 export const handleExcelFileRequest = async(req: Request, res: Response) => {
@@ -59,12 +65,12 @@ export const addPostTag = async (req:Request, res: Response) => {
 
 export const PostFilterCategory = async (req: Request, res: Response) => {
     const id = req.params.id 
-    const result = getPostByCategory(parseInt(id))
+    const result = await getPostByCategory(parseInt(id))
     res.status(200).json(result)
 }
 
 export const PostFilterTag = async (req: Request, res: Response) => {
     const id = req.params.id 
-    const result = getPostByTag(parseInt(id))
+    const result = await getPostByTag(parseInt(id))
     res.status(200).json(result)
 }

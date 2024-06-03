@@ -10,6 +10,18 @@ export const getAllPost = async () => {
   return posts;
 };
 
+export const getPostById = async (id:number) => {
+  const posts = await prisma.post.findUnique({
+      where:{
+          postId: id
+      },
+      include:{
+        Category: true,
+      }
+  })
+  return posts
+}
+
 export const readFileExcelPost = async (excelFile: string) => {
   const workbook = xlsx.readFile(excelFile);
   const sheetName = workbook.SheetNames[0];
@@ -56,7 +68,7 @@ export const addTagToPost = async (tags: number[], postId: number) => {
 };
 
 export const getPostByCategory = async (categoryId:number) => {
-    const posts = prisma.post.findMany({
+    const posts = await prisma.post.findMany({
         where:{
             categoryId
         }
@@ -65,7 +77,7 @@ export const getPostByCategory = async (categoryId:number) => {
 }
 
 export const getPostByTag = async (tagId:number) => {
-    const posts = prisma.post.findMany({
+    const posts = await prisma.post.findMany({
         include:{
             PostTag: {
                 where: {

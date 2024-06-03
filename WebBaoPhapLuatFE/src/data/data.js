@@ -43,3 +43,14 @@ export const posts = [
     imageUrl:"https://image.baophapluat.vn/240x160/Uploaded/2024/bibpquig/2024_05_28/img-4620-3524.jpeg"
   }
 ];
+
+export const MenuAdmin = [
+  {
+    content:"Quản lý bài báo",
+    link:"PostManage"
+  },
+  {
+    content:"Đăng bài",
+    link:"AddPost"
+  },
+]

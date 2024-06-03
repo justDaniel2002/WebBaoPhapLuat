@@ -8,6 +8,9 @@ import {
 } from "react-router-dom";
 import { MainLayout } from "./layouts/mainLayout";
 import { Home } from "./pages/user/Home";
+import PostByCate from "./pages/user/PostByCate";
+import PostByTag from "./pages/user/PostByTag";
+import PostDetail from "./pages/user/PostDetail";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -15,8 +18,16 @@ function App() {
         <Route element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route
-            path="Home"
-            element={<Home />}
+            path="PostByCate/:id"
+            element={<PostByCate />}
+          />
+          <Route
+            path="PostByTag/:id"
+            element={<PostByTag />}
+          />
+          <Route
+            path="PostDetail/:id"
+            element={<PostDetail />}
           />
         </Route>
       </Route>

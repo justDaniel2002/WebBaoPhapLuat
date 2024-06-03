@@ -1,4 +1,4 @@
-import { PostFilterCategory, PostFilterTag, addPostTag, delPost, getPosts, handleExcelFileRequest, updatePost } from "../controllers/PostsController";
+import { PostFilterCategory, PostFilterTag, addPostTag, delPost, getPosts, getPtById, handleExcelFileRequest, updatePost } from "../controllers/PostsController";
 import multer from 'multer';
 import PromiseRouter from "express-promise-router";
 
@@ -7,7 +7,7 @@ const upload = multer({ dest: 'uploads/' });
 
 postRoute.route("/").get(getPosts)
 
-postRoute.route("/:id").put(updatePost).delete(delPost)
+postRoute.route("/:id").get(getPtById).put(updatePost).delete(delPost)
 
 postRoute.route("/getPostByCate/:id").get(PostFilterCategory)
 
