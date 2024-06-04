@@ -16,7 +16,7 @@ model Account {
   roleId      Int?
   createdDate DateTime?  @default(now(), map: "DF_Account_createdDate") @db.DateTime
   Role        Role?      @relation(fields: [roleId], references: [roleId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Account_Role")
-  Comment     Comment[]  @ignore
+  Comment     Comment[]
   Post        Post[]
   PostView    PostView[]
 }
@@ -37,7 +37,7 @@ model Post {
   createdBy   Int?
   categoryId  Int?
   description String?    @db.VarChar(Max)
-  Comment     Comment[]  @ignore
+  Comment     Comment[]
   Account     Account?   @relation(fields: [createdBy], references: [accountId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Account")
   Category    Category?  @relation(fields: [categoryId], references: [categoryId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Category")
   PostTag     PostTag[]
@@ -85,15 +85,12 @@ model PostView {
   @@id([postId, accountId], map: "PK_PostView")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Comment {
-  commentId   Int       @default(autoincrement())
+  commentId   Int       @id(map: "PK_Comment") @default(autoincrement())
   content     String?   @db.NVarChar(Max)
   createdDate DateTime? @default(now(), map: "DF_Comment_createdDate") @db.DateTime
   accountId   Int?
   postId      Int?
   Account     Account?  @relation(fields: [accountId], references: [accountId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Comment_Account")
   Post        Post?     @relation(fields: [postId], references: [postId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Comment_Post")
-
-  @@ignore
 }

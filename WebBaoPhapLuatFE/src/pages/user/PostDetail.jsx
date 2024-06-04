@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getApi } from "../../api/service";
-import { getPostByCate, get_del_edit_PostById } from "../../api/api";
-import logo from "../../assets/bplLOGO.png"
+import {
+  getPostByCate,
+  get_del_comment,
+  get_del_edit_PostById,
+} from "../../api/api";
+import logo from "../../assets/bplLOGO.png";
+import Comments from "../../components/Comments";
 
 export default function PostDetail() {
   const [post, setPost] = useState();
   const [otherPost, setOther] = useState([]);
+  const [comments, setComments] = useState([]);
 
   const params = useParams();
   const id = params.id;
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     getApi(get_del_edit_PostById, id).then((res) => {
       setPost(res);
-      getApi(getPostByCate, res.categoryId).then((res2) =>
-        setOther(res2)
-      );
+
+      getApi(getPostByCate, res.categoryId).then((res2) => setOther(res2));
+
+      getApi(get_del_comment, res.postId).then((res3) => setComments(res3));
     });
   });
   return (
-    <div className="mt-16">
+    <div className="my-16">
       <div className="text-lg text-red-600 mb-3">
         {post?.Category?.categoryName}
       </div>
@@ -39,15 +46,19 @@ export default function PostDetail() {
           </div>
           <div>
             {otherPost.map((post) => (
-              <div onClick={() => navigate(`/PostDetail/${post?.postId}`)} className="flex mb-5">
-                <img className="w-1/3 mr-3" src={post?.imageURL??logo}/>
+              <div
+                onClick={() => navigate(`/PostDetail/${post?.postId}`)}
+                className="flex mb-5"
+              >
+                <img className="w-1/3 mr-3" src={post?.imageURL ?? logo} />
                 <div className="w-2/3 text-wrap">{post?.title}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
-     
-      </div>
+
+      <Comments commentsState={[comments, setComments]} />
+    </div>
   );
 }

@@ -13,5 +13,8 @@ export const getCategoryById = `${host}/categories/`
 export const getTags = `${host}/tags`
 export const getTagById = `${host}/tags/`
 
+export const get_del_comment = `${host}/comments/`
+export const addComment = `${host}/comments/add`
+
 export const signIn = `${host}/auth/signIn`
 export const signUp = `${host}/auth/signUp`

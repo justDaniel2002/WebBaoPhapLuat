@@ -54,3 +54,5 @@ export const MenuAdmin = [
     link:"AddPost"
   },
 ]
+
+export const EmptyAvatar = "https://i.pinimg.com/originals/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.webp"
