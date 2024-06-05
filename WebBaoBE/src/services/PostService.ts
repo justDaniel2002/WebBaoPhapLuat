@@ -1,7 +1,7 @@
 import { Post } from "@prisma/client";
 import PrismaService from "./prisma";
 import xlsx from "xlsx";
-import fs from 'fs';
+import fs from "fs";
 
 const prisma = PrismaService.getInstance();
 
@@ -10,17 +10,18 @@ export const getAllPost = async () => {
   return posts;
 };
 
-export const getPostById = async (id:number) => {
+export const getPostById = async (id: number) => {
   const posts = await prisma.post.findUnique({
-      where:{
-          postId: id
-      },
-      include:{
-        Category: true,
-      }
-  })
-  return posts
-}
+    where: {
+      postId: id,
+    },
+    include: {
+      Category: true,
+      PostTag: true,
+    },
+  });
+  return posts;
+};
 
 export const readFileExcelPost = async (excelFile: string) => {
   const workbook = xlsx.readFile(excelFile);
@@ -60,6 +61,11 @@ export const deletePost = async (id: number) => {
 };
 
 export const addTagToPost = async (tags: number[], postId: number) => {
+  await prisma.postTag.deleteMany({
+    where:{
+      postId
+    }
+  })
   await prisma.postTag.createMany({
     data: tags.map((tag) => {
       return { tagId: tag, postId };
@@ -67,25 +73,40 @@ export const addTagToPost = async (tags: number[], postId: number) => {
   });
 };
 
-export const getPostByCategory = async (categoryId:number) => {
-    const posts = await prisma.post.findMany({
-        where:{
-            categoryId
-        }
-    })
-    return posts
-}
+export const getPostByCategory = async (categoryId: number) => {
+  const posts = await prisma.post.findMany({
+    where: {
+      categoryId,
+    },
+  });
+  return posts;
+};
 
-export const getPostByTag = async (tagId:number) => {
-    const posts = await prisma.post.findMany({
-        include:{
-            PostTag: {
-                where: {
-                    tagId
-                }
-            }
-        }
-    })
+export const getPostByTag = async (tagId: number) => {
+  const posts = await prisma.post.findMany({
+    include: {
+      PostTag: {
+        where: {
+          tagId,
+        },
+      },
+    },
+  });
 
-    return posts
+  return posts;
+};
+
+export const getPostByTitle = async (title: string) => {
+  let posts = await prisma.post.findMany();
+  posts = posts.filter((p) => p.title?.includes(title));
+  return posts;
+};
+
+export const getPostByAccountId = async (id:number) => {
+  const posts = await prisma.post.findMany({
+    where:{
+      createdBy: id
+    }
+  })
+  return posts;
 }

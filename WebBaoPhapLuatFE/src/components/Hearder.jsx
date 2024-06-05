@@ -1,8 +1,12 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { accountState } from "../state/AccountState";
 
 export const Header = () => {
-
+  const [account, setAccount] = useRecoilState(accountState)
+  const [search, setSearch] = useState("")
   const navigate = useNavigate()
   return (
     <>
@@ -13,9 +17,18 @@ export const Header = () => {
           baodientuphapluat@gmail.com
         </div>
         <div className="flex items-center">
-          <input className="px-3 mr-5" placeholder="Tìm kiếm" />
+          <input onKeyDown={event => {
+            if(search.length==0){
+              return
+            }
+            if(event.key === 'Enter'){
+              navigate(`/SearchPosts/${search}`)
+            }
+          }} value={search} onChange={event => setSearch(event.target.value)} className="px-3 mr-5" placeholder="Tìm kiếm" />
+          
 
-          <div onClick={() => navigate("/auth/login")} className="hover:bg-red-600 hover:text-white px-2 py-1">Đăng nhập/Đăng ký</div>
+           {account?<div onClick={() => navigate("/auth/login")} className="hover:bg-red-600 hover:text-white px-2 py-1">Đăng xuất</div>:<div onClick={() => navigate("/auth/login")} className="hover:bg-red-600 hover:text-white px-2 py-1">Đăng nhập/Đăng ký</div>} 
+          {account?.roleId==1||account?.roleId==2?<div onClick={() => navigate("/admin")} className="hover:bg-red-600 hover:text-white px-2 py-1">Quản trị viên</div>:""} 
         </div>
       </div>
     </>

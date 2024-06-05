@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getApi } from "../../api/service";
 import {
+  getComments,
   getPostByCate,
   get_del_comment,
   get_del_edit_PostById,
@@ -26,7 +27,7 @@ export default function PostDetail() {
 
       getApi(get_del_comment, res.postId).then((res3) => setComments(res3));
     });
-  });
+  },[]);
   return (
     <div className="my-16">
       <div className="text-lg text-red-600 mb-3">
@@ -58,7 +59,7 @@ export default function PostDetail() {
         </div>
       </div>
 
-      <Comments commentsState={[comments, setComments]} />
+      <Comments commentsState={[comments, setComments]} postId={post?.postId}/>
     </div>
   );
 }

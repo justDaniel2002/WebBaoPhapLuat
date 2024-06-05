@@ -7,8 +7,8 @@ export const register = async (email:string, password:string) => {
     await prisma.account.create({
         data:{
             email,
-            password:await hashPassword(password),
-            roleId:2
+            password: hashPassword(password),
+            roleId:3
         }
     })
 }
@@ -17,7 +17,7 @@ export const login = async (email:string, password:string) => {
     const account = await prisma.account.findFirst({
         where: {
             email,
-            password:await hashPassword(password),
+            password: hashPassword(password),
         },
         select:{
             accountId: true,
@@ -28,4 +28,5 @@ export const login = async (email:string, password:string) => {
             createdDate: true
         }
     })
+    return account
 }

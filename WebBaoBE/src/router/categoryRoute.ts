@@ -3,6 +3,7 @@ import { getCateById, getCategories } from "../controllers/CategoryController";
 
 export const categoryRoute = PromiseRouter()
 
+categoryRoute.route('/:id').get(getCateById)
+
 categoryRoute.route('/').get(getCategories)
 
-categoryRoute.route('/:id').get(getCateById)

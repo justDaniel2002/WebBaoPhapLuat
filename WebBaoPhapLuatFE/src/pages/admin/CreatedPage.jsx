@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/bplLOGO.png";
 import { useNavigate } from "react-router-dom";
-import { getPosts, get_del_edit_PostById } from "../../api/api";
+import {
+  getPosts,
+  getPostsByAuthor,
+  get_del_edit_PostById,
+} from "../../api/api";
 import { delApi, getApi } from "../../api/service";
-export default function AdminPage() {
+import { accountState } from "../../state/AccountState";
+import { useRecoilState } from "recoil";
+
+export default function CreatedPostPage() {
+  const [account, setAccount] = useRecoilState(accountState);
   const [posts, setPosts] = useState([]);
+  
   const navigate = useNavigate();
   useEffect(() => {
-    getApi(getPosts).then((res) => setPosts(res));
+    getApi(getPostsByAuthor, account?.accountId).then((res) => setPosts(res));
   }, []);
 
   const deletePost = (id) => {
@@ -28,10 +37,10 @@ export default function AdminPage() {
             </div>
             <div className="flex justify-end mt-5">
               <button
-                onClick={() => navigate(`/PostDetail/${post?.postId}`)}
+                onClick={() => navigate(`/createdPost/EditPost/${post?.postId}`)}
                 className="hover:font-bold transition-all rounded-3xl px-5 py-1 border font-thin text-red-600 mr-3"
               >
-                Chi tiết
+                Chỉnh sửa
               </button>
               <button
                 onClick={() => deletePost(post?.postId)}

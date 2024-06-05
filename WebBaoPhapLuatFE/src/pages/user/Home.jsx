@@ -77,7 +77,7 @@ export const Home = () => {
       {tags.map((tag) => (
         <>
         <div className="w-full bg-neutral-100 p-5 mb-10">
-            <div className="text-3xl text-slate-900 font-serif text-center">{tag?.tagName?.toUpperCase()}</div>
+            <div className="text-3xl text-slate-900 font-light text-center">{tag?.tagName?.toUpperCase()}</div>
         </div>
         </>
       ))}

@@ -3,6 +3,7 @@ import { commenting, delComment, getComments } from "../controllers/CommentContr
 
 export const commentRoute = PromiseRouter()
 
+commentRoute.route("/add").post(commenting)
+
 commentRoute.route("/:id").get(getComments).delete(delComment)
 
-commentRoute.route("/add").post(commenting)

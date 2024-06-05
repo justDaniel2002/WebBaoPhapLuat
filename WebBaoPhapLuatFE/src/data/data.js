@@ -47,11 +47,15 @@ export const posts = [
 export const MenuAdmin = [
   {
     content:"Quản lý bài báo",
-    link:"PostManage"
+    link:"Admin"
   },
   {
     content:"Đăng bài",
-    link:"AddPost"
+    link:"createPost"
+  },
+  {
+    content:"Các bài đã tạo",
+    link:"createdPost"
   },
 ]
 
