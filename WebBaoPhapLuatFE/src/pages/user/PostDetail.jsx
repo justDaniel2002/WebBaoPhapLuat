@@ -39,9 +39,9 @@ export default function PostDetail() {
         <div className="w-4/6 mr-3">
           {post?.imageURL ? <img src={post?.imageURL} className="mb-5" /> : ""}
           <div className="font-medium text-lg mb-5">{post?.description}</div>
-          <div className="text-neutral-500">{post?.content}</div>
+          <div dangerouslySetInnerHTML={{ __html: post?.content }} className="text-neutral-500"></div>
         </div>
-        <div className="w-2/6">
+        <div className="w-2/6 pl-5 max-h-screen overflow-y-auto">
           <div className="text-2xl font-medium mb-5">
             {post?.Category?.categoryName}
           </div>

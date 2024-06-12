@@ -4,7 +4,7 @@ export const getPosts = `${host}/posts`
 export const get_del_edit_PostById = `${getPosts}/`
 export const getPostByCate = `${getPosts}/getPostByCate/`
 export const getPostByTag = `${getPosts}/getPostByTag/`
-export const addTagForPost = `${getPosts}/addTag/`
+export const getPostByInnerTag = `${getPosts}/getPostByInnerTag/`
 export const uploadPost = `${getPosts}/upload`
 export const searchPost = `${getPosts}/search/`
 export const getPostsByAuthor = `${getPosts}/author/`
@@ -14,6 +14,7 @@ export const getCategoryById = `${host}/categories/`
 
 export const getTags = `${host}/tags`
 export const getTagById = `${host}/tags/`
+export const getInnerTagById = `${host}/tags/innerTag/`
 
 export const getComments = `${host}/comments`
 export const get_del_comment = `${host}/comments/`

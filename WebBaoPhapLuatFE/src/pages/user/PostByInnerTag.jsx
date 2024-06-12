@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getApi } from "../../api/service";
-import { getCategoryById, getPostByCate } from "../../api/api";
+import { getInnerTagById, getPostByInnerTag } from "../../api/api";
 
-export default function PostByCate() {
-  const [category, setCate] = useState();
+export default function PostByInnerTag() {
+  const [innertag, setTag] = useState();
   const [posts, setPosts] = useState([]);
   const params = useParams();
   const id = params.id;
 
   const navigate = useNavigate()
   useEffect(() => {
-    getApi(getCategoryById, id).then((res) => setCate(res));
-    getApi(getPostByCate, id).then((res) => setPosts(res));
+    getApi(getInnerTagById, id).then((res) => setTag(res));
+    getApi(getPostByInnerTag, id).then((res) => setPosts(res));
   }, [id]);
   return (
     <div className="py-16">
-      <div className="text-2xl text-red-600 mb-10">{category?.categoryName}</div>
+      <div className="text-2xl text-red-600 mb-10">{innertag?.innerTagName}</div>
       <div>
         {posts.map((post) => (
-          <div onClick={() => navigate(`/PostDetail/${post?.postId}`)} className="my-20 hover:text-red-500">
+          <div onClick={() => navigate(`/PostDetail/${post?.postId}`)} className="my-20">
             <div className="text-xl mb-3 font-bold">{post?.title}</div>
             <div className="flex">
               {post?.imageURL ? (

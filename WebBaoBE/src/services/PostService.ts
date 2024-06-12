@@ -17,7 +17,11 @@ export const getPostById = async (id: number) => {
     },
     include: {
       Category: true,
-      PostTag: true,
+      Tag: {
+        include:{
+          InnerTag: true,
+        }
+      },
     },
   });
   return posts;
@@ -41,36 +45,57 @@ export const addManyPosts = async (posts: Post[]) => {
   });
 };
 
-export const editPost = async (post: Post, id: number) => {
-  await prisma.post.update({
-    where: {
-      postId: id,
-    },
-    data: {
-      ...post,
-    },
-  });
+export const editPost = async (post: any, id: number) => {
+  try {
+    await prisma.post.update({
+      where: {
+        postId: id,
+      },
+      data: {
+        title: post.title,
+        imageURL: post.imageURL,
+        content: post.content,
+        createdDate: post.createdDate,
+        description: post.description,
+        categoryId: post.categoryId,
+      },
+    });
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const deletePost = async (id: number) => {
-  await prisma.post.delete({
-    where: {
-      postId: id,
-    },
-  });
+  
+  try {
+    // await prisma.postTag.deleteMany({
+    //   where:{
+    //     postId: id
+    //   }
+    // })
+    await prisma.post.delete({
+      where: {
+        postId: id,
+      },
+    });
+  } catch (error) {
+    console.log(error)
+  }
 };
 
-export const addTagToPost = async (tags: number[], postId: number) => {
-  await prisma.postTag.deleteMany({
+export const getPostsByInnerTag = async (innerTagId:number) => {
+  const posts = await prisma.post.findMany({
     where:{
-      postId
+      innerTagId
+    },
+    include:{
+      Category: true,
+      Tag: true,
+      InnerTag: true,
     }
-  })
-  await prisma.postTag.createMany({
-    data: tags.map((tag) => {
-      return { tagId: tag, postId };
-    }),
   });
+
+  return posts;
 };
 
 export const getPostByCategory = async (categoryId: number) => {
@@ -78,19 +103,25 @@ export const getPostByCategory = async (categoryId: number) => {
     where: {
       categoryId,
     },
+    include:{
+      Category: true,
+      Tag: true,
+      InnerTag: true,
+    }
   });
   return posts;
 };
 
 export const getPostByTag = async (tagId: number) => {
   const posts = await prisma.post.findMany({
-    include: {
-      PostTag: {
-        where: {
-          tagId,
-        },
-      },
+    where:{
+      tagId
     },
+    include:{
+      Category: true,
+      Tag: true,
+      InnerTag: true,
+    }
   });
 
   return posts;
@@ -102,11 +133,11 @@ export const getPostByTitle = async (title: string) => {
   return posts;
 };
 
-export const getPostByAccountId = async (id:number) => {
+export const getPostByAccountId = async (id: number) => {
   const posts = await prisma.post.findMany({
-    where:{
-      createdBy: id
-    }
-  })
+    where: {
+      createdBy: id,
+    },
+  });
   return posts;
-}
+};

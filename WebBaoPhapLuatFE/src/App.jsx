@@ -13,14 +13,19 @@ import PostByTag from "./pages/user/PostByTag";
 import PostDetail from "./pages/user/PostDetail";
 import { Login } from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { AdminLayout } from "./layouts/adminLayout";
 import AdminPage from "./pages/admin/AdminPage";
 import SearchPosts from "./pages/user/SearchPosts";
 import AddPostPage from "./pages/admin/AddPostPage";
 import CreatedPostPage from "./pages/admin/CreatedPage";
 import EditPostPage from "./pages/admin/EditPostPage";
+import PostByInnerTag from "./pages/user/PostByInnerTag";
+import { motion } from "framer-motion";
+import { ModalStackContainer } from "rc-modal-sheet";
+import "rc-modal-sheet/dist/index.css"
+
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -41,6 +46,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="PostByCate/:id" element={<PostByCate />} />
           <Route path="PostByTag/:id" element={<PostByTag />} />
+          <Route path="PostByInnerTag/:id" element={<PostByInnerTag />} />
           <Route path="PostDetail/:id" element={<PostDetail />} />
           <Route path="SearchPosts/:search" element={<SearchPosts />} />
         </Route>
@@ -50,8 +56,11 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router} />
-      <ToastContainer />
+      <ModalStackContainer m={motion}>
+        {" "}
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </ModalStackContainer>
     </>
   );
 }

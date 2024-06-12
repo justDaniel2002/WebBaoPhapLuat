@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import logo from "../../assets/bplLOGO.png";
 import { useNavigate } from "react-router-dom";
 import { getPosts, get_del_edit_PostById } from "../../api/api";
 import { delApi, getApi } from "../../api/service";
+import { Modal } from "rc-modal-sheet";
 export default function AdminPage() {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  let selectedDeletePostId = useRef();
+
   useEffect(() => {
     getApi(getPosts).then((res) => setPosts(res));
   }, []);
@@ -34,7 +39,10 @@ export default function AdminPage() {
                 Chi tiết
               </button>
               <button
-                onClick={() => deletePost(post?.postId)}
+                 onClick={() => {
+                  selectedDeletePostId.current = post?.postId;
+                  setOpen(true);
+                }}
                 className="hover:font-bold transition-all rounded-3xl px-5 py-1 font-thin bg-red-600 text-white"
               >
                 Xóa
@@ -43,6 +51,16 @@ export default function AdminPage() {
           </div>
         </div>
       ))}
+
+<Modal className="bg-white" title="Bạn có chắc muốn xóa bài báo này ?" open={open} onOpenChange={setOpen}>
+        <div className="px-10">
+        <p>
+          Hành động này sẽ không thể quay lại
+        </p>
+        <div className="flex justify-end mt-5"><button onClick={() => {console.log(selectedDeletePostId.current); deletePost(selectedDeletePostId.current); setOpen(false)}} className="bg-red-500 text-white px-3 py-2 rounded-lg">Xóa</button></div>
+        </div>
+        
+      </Modal>
     </div>
   );
 }

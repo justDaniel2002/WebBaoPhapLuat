@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addManyPosts, addTagToPost, deletePost, editPost, getAllPost, getPostByAccountId, getPostByCategory, getPostById, getPostByTag, getPostByTitle, readFileExcelPost } from "../services/PostService"
+import { addManyPosts, deletePost, editPost, getAllPost, getPostByAccountId, getPostByCategory, getPostById, getPostByTag, getPostByTitle, getPostsByInnerTag, readFileExcelPost } from "../services/PostService"
 import { Post } from "@prisma/client";
 
 export const getPosts = async (req: Request, res: Response) => {
@@ -35,8 +35,11 @@ export const handleExcelFileRequest = async(req: Request, res: Response) => {
 export const updatePost = async (req:Request, res: Response) => {
     const id = req.params.id
     const post = req.body
+    delete post.postId
+    delete post.createdBy
     try {
-        const result = await editPost(post, parseInt(id))
+        await editPost(post, parseInt(id))
+        res.status(200).send("Update successfully")
     } catch (error:any) {
         res.status(500).send(error.message);
     }
@@ -52,15 +55,10 @@ export const delPost = async (req:Request, res: Response) => {
     }
 }
 
-export const addPostTag = async (req:Request, res: Response) => {
-    const tags = req.body
+export const PostsFilterInnerTag = async (req:Request, res: Response) => {
     const id = req.params.id 
-    try {
-        await addTagToPost(tags, parseInt(id))
-        res.status(200).send("Add Tag To Post successfully")
-    } catch (error:any) {
-        res.status(500).send(error.message)
-    }
+    const result = await getPostsByInnerTag(parseInt(id))
+    res.status(200).json(result)
 }
 
 export const PostFilterCategory = async (req: Request, res: Response) => {
@@ -84,6 +82,5 @@ export const SearchPost  = async (req: Request, res: Response) => {
 export const getPostsByAuthor  = async (req: Request, res: Response) => {
     const id = req.params.id
     const result = await getPostByAccountId(parseInt(id))
-    console.log("result", result)
     res.status(200).json(result)
 }

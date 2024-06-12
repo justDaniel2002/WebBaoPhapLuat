@@ -37,20 +37,14 @@ model Post {
   createdBy   Int?
   categoryId  Int?
   description String?    @db.VarChar(Max)
+  tagId       Int?
+  innerTagId  Int?
   Comment     Comment[]
   Account     Account?   @relation(fields: [createdBy], references: [accountId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Account")
   Category    Category?  @relation(fields: [categoryId], references: [categoryId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Category")
-  PostTag     PostTag[]
+  InnerTag    InnerTag?  @relation(fields: [innerTagId], references: [innerTagId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_InnerTag")
+  Tag         Tag?       @relation(fields: [tagId], references: [tagId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Tag")
   PostView    PostView[]
-}
-
-model PostTag {
-  postId Int
-  tagId  Int
-  Post   Post @relation(fields: [postId], references: [postId], onUpdate: NoAction, map: "FK_PostTag_Post")
-  Tag    Tag  @relation(fields: [tagId], references: [tagId], onUpdate: NoAction, map: "FK_PostTag_Tag")
-
-  @@id([postId, tagId], map: "PK_PostTag")
 }
 
 model Role {
@@ -70,9 +64,10 @@ model sysdiagrams {
 }
 
 model Tag {
-  tagId   Int       @id(map: "PK_Tag") @default(autoincrement())
-  tagName String?   @db.NVarChar(100)
-  PostTag PostTag[]
+  tagId    Int        @id(map: "PK_Tag") @default(autoincrement())
+  tagName  String?    @db.NVarChar(100)
+  InnerTag InnerTag[]
+  Post     Post[]
 }
 
 model PostView {
@@ -93,4 +88,12 @@ model Comment {
   postId      Int?
   Account     Account?  @relation(fields: [accountId], references: [accountId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Comment_Account")
   Post        Post?     @relation(fields: [postId], references: [postId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Comment_Post")
+}
+
+model InnerTag {
+  innerTagId   Int     @id(map: "PK_InnerTag") @default(autoincrement())
+  tagId        Int?
+  innerTagName String? @db.NVarChar(Max)
+  Tag          Tag?    @relation(fields: [tagId], references: [tagId], onDelete: NoAction, onUpdate: NoAction, map: "FK_InnerTag_Tag")
+  Post         Post[]
 }

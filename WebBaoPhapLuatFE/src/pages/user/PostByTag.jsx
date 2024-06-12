@@ -13,14 +13,14 @@ export default function PostByTag() {
   useEffect(() => {
     getApi(getTagById, id).then((res) => setTag(res));
     getApi(getPostByTag, id).then((res) => setPosts(res));
-  }, []);
+  }, [id]);
   return (
     <div className="py-16">
-      <div className="text-xl text-red-600 mb-10">{tag?.tagName}</div>
+      <div className="text-2xl text-red-600 mb-10">{tag?.tagName}</div>
       <div>
         {posts.map((post) => (
-          <div onClick={() => navigate(`/PostDetail/${post?.postId}`)} className="my-5">
-            <div className="text-lg mb-3">{post?.title}</div>
+          <div onClick={() => navigate(`/PostDetail/${post?.postId}`)} className="my-20">
+            <div className="text-xl mb-3 font-bold">{post?.title}</div>
             <div className="flex">
               {post?.imageURL ? (
                 <img src={post?.imageURL} className="w-1/5 mr-2" />

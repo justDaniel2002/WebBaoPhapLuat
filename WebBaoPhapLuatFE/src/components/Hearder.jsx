@@ -27,8 +27,8 @@ export const Header = () => {
           }} value={search} onChange={event => setSearch(event.target.value)} className="px-3 mr-5" placeholder="Tìm kiếm" />
           
 
-           {account?<div onClick={() => navigate("/auth/login")} className="hover:bg-red-600 hover:text-white px-2 py-1">Đăng xuất</div>:<div onClick={() => navigate("/auth/login")} className="hover:bg-red-600 hover:text-white px-2 py-1">Đăng nhập/Đăng ký</div>} 
-          {account?.roleId==1||account?.roleId==2?<div onClick={() => navigate("/admin")} className="hover:bg-red-600 hover:text-white px-2 py-1">Quản trị viên</div>:""} 
+           {account?<div onClick={() => setAccount(undefined)} className="hover:bg-red-600 hover:text-white px-2 py-1">Đăng xuất</div>:<div onClick={() => navigate("/auth/login")} className="hover:bg-red-600 hover:text-white px-2 py-1">Đăng nhập/Đăng ký</div>} 
+          {account?.roleId==1||account?.roleId==2?<div onClick={() => navigate("/Admin")} className="hover:bg-red-600 hover:text-white px-2 py-1">Quản trị viên</div>:""} 
         </div>
       </div>
     </>

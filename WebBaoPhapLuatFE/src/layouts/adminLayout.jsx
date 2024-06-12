@@ -14,6 +14,10 @@ export const AdminLayout = () => {
       navigate("/");
     }
   });
+
+  const signOut = () => {
+    setAccount(undefined)
+  }
   return (
     <>
       <div className="flex">
@@ -33,7 +37,7 @@ export const AdminLayout = () => {
             ))}
           </div>
 
-          <div className=" px-5 py-1 text-xl mb-5 text-neutral-500 bg-neutral-200 hover:font-bold hover:bg-white hover:text-red-600 transition-all border rounded-3xl">
+          <div onClick={signOut} className=" px-5 py-1 text-xl mb-5 text-neutral-500 bg-neutral-200 hover:font-bold hover:bg-white hover:text-red-600 transition-all border rounded-3xl">
             Đăng xuất
           </div>
         </div>
