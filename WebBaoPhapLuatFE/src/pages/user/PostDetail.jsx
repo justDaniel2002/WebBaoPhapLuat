@@ -27,7 +27,7 @@ export default function PostDetail() {
 
       getApi(get_del_comment, res.postId).then((res3) => setComments(res3));
     });
-  },[]);
+  },[id]);
   return (
     <div className="my-16">
       <div className="text-lg text-red-600 mb-3">
