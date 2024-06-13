@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addManyPosts, deletePost, editPost, getAllPost, getPostByAccountId, getPostByCategory, getPostById, getPostByTag, getPostByTitle, getPostsByInnerTag, readFileExcelPost } from "../services/PostService"
+import { addManyPosts, addPost, addViewPost, deletePost, editPost, getAllPost, getPostByAccountId, getPostByCategory, getPostById, getPostByTag, getPostByTitle, getPostsByInnerTag, readFileExcelPost } from "../services/PostService"
 import { Post } from "@prisma/client";
 
 export const getPosts = async (req: Request, res: Response) => {
@@ -45,6 +45,28 @@ export const updatePost = async (req:Request, res: Response) => {
     }
 }
 
+export const createPost = async (req:Request, res: Response) => {
+    const post = req.body
+    delete post.postId
+    try {
+        await addPost(post)
+        res.status(200).send("Add successfully")
+    } catch (error:any) {
+      
+        res.status(500).send(error.message);
+    }
+}
+
+export const addView = async (req:Request, res: Response) => {
+    const view = req.body 
+    try {
+        await addViewPost(view)
+        res.status(200).send("Add successfully")
+    } catch (error:any) {
+      
+        res.status(500).send(error.message);
+    }
+}
 export const delPost = async (req:Request, res: Response) => {
     const id = req.params.id 
     try {

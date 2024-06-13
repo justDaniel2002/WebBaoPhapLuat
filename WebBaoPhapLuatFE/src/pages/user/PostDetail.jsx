@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getApi } from "../../api/service";
+import { getApi, postApi } from "../../api/service";
 import {
+  addView,
   getComments,
   getPostByCate,
   get_del_comment,
@@ -9,8 +10,12 @@ import {
 } from "../../api/api";
 import logo from "../../assets/bplLOGO.png";
 import Comments from "../../components/Comments";
+import { useRecoilState } from "recoil";
+import { accountState } from "../../state/AccountState";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 export default function PostDetail() {
+  const [account, setAccount] = useRecoilState(accountState)
   const [post, setPost] = useState();
   const [otherPost, setOther] = useState([]);
   const [comments, setComments] = useState([]);
@@ -23,6 +28,8 @@ export default function PostDetail() {
     getApi(get_del_edit_PostById, id).then((res) => {
       setPost(res);
 
+      postApi(addView, {postId: res?.postId, accountId: account?.accountId})
+
       getApi(getPostByCate, res.categoryId).then((res2) => setOther(res2));
 
       getApi(get_del_comment, res.postId).then((res3) => setComments(res3));
@@ -34,7 +41,8 @@ export default function PostDetail() {
         {post?.Category?.categoryName}
       </div>
       <div className="text-2xl font-medium mb-3">{post?.title}</div>
-      <div className="text-neutral-500">{post?.createdDate}</div>
+      <div className="text-neutral-500 mb-3">{post?.createdDate}</div>
+      <div className="text-neutral-500 flex items-center mb-3"><Icon icon="mdi:eye" className="mr-3"/> {post?.PostView?.length??0}</div>
       <div className="flex">
         <div className="w-4/6 mr-3">
           {post?.imageURL ? <img src={post?.imageURL} className="mb-5" /> : ""}

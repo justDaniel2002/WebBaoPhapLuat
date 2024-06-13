@@ -36,9 +36,9 @@ model Post {
   createdDate DateTime?  @default(now(), map: "DF_Post_createdDate") @db.DateTime
   createdBy   Int?
   categoryId  Int?
-  description String?    @db.VarChar(Max)
   tagId       Int?
   innerTagId  Int?
+  description String?    @db.NVarChar(Max)
   Comment     Comment[]
   Account     Account?   @relation(fields: [createdBy], references: [accountId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Account")
   Category    Category?  @relation(fields: [categoryId], references: [categoryId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Category")
@@ -70,14 +70,16 @@ model Tag {
   Post     Post[]
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model PostView {
-  postId    Int
-  accountId Int
+  viewId    Int       @id(map: "PK_PostView") @default(autoincrement())
+  accountId Int?
+  postId    Int?
   viewDate  DateTime? @default(now(), map: "DF_PostView_viewDate") @db.DateTime
-  Account   Account   @relation(fields: [accountId], references: [accountId], onUpdate: NoAction, map: "FK_PostView_Account")
-  Post      Post      @relation(fields: [postId], references: [postId], onUpdate: NoAction, map: "FK_PostView_Post")
+  Account   Account?  @relation(fields: [accountId], references: [accountId], onDelete: NoAction, onUpdate: NoAction, map: "FK_PostView_Account")
+  Post      Post?     @relation(fields: [postId], references: [postId], onDelete: NoAction, onUpdate: NoAction, map: "FK_PostView_Post")
 
-  @@id([postId, accountId], map: "PK_PostView")
+  
 }
 
 model Comment {

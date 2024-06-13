@@ -25,6 +25,7 @@ import PostByInnerTag from "./pages/user/PostByInnerTag";
 import { motion } from "framer-motion";
 import { ModalStackContainer } from "rc-modal-sheet";
 import "rc-modal-sheet/dist/index.css"
+import AddOnePostPage from "./pages/admin/AddOnePostPage";
 
 function App() {
   const router = createBrowserRouter(
@@ -38,6 +39,7 @@ function App() {
         <Route element={<AdminLayout />}>
           <Route path="Admin" element={<AdminPage />} />
           <Route path="createPost" element={<AddPostPage />} />
+          <Route path="createOnePost" element={<AddOnePostPage />} />
           <Route path="createdPost" element={<CreatedPostPage />} />
           <Route path="createdPost/EditPost/:id" element={<EditPostPage />} />
         </Route>

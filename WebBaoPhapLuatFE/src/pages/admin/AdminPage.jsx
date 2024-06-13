@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getPosts, get_del_edit_PostById } from "../../api/api";
 import { delApi, getApi } from "../../api/service";
 import { Modal } from "rc-modal-sheet";
+import { toast } from "react-toastify";
 export default function AdminPage() {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
@@ -16,9 +17,12 @@ export default function AdminPage() {
   }, []);
 
   const deletePost = (id) => {
-    delApi(get_del_edit_PostById, id).then(() => {
-      getApi(getPosts).then((res) => setPosts(res));
-    });
+    delApi(get_del_edit_PostById, id)
+      .then(() => {
+        toast.success("Đã xóa bài đăng");
+        getApi(getPosts).then((res) => setPosts(res));
+      })
+      .catch(() => toast.error("Xóa bài đăng thất bại"));
   };
   return (
     <div className="pt-20 px-10 flex flex-wrap">
@@ -31,7 +35,7 @@ export default function AdminPage() {
             <div className="text-right text-xs text-neutral-500">
               {post?.createdDate}
             </div>
-            <div className="flex justify-end mt-5">
+            <div className="flex justify-end mt-5 mb-1">
               <button
                 onClick={() => navigate(`/PostDetail/${post?.postId}`)}
                 className="hover:font-bold transition-all rounded-3xl px-5 py-1 border font-thin text-red-600 mr-3"
@@ -39,7 +43,7 @@ export default function AdminPage() {
                 Chi tiết
               </button>
               <button
-                 onClick={() => {
+                onClick={() => {
                   selectedDeletePostId.current = post?.postId;
                   setOpen(true);
                 }}
@@ -48,18 +52,35 @@ export default function AdminPage() {
                 Xóa
               </button>
             </div>
+            <div className="text-neutral-500 text-sm flex justify-between">
+              <div>comment: {post?.Comment?.length??0}</div>
+              <div>Lượt xem: {post?.PostView?.length??0}</div>
+            </div>
           </div>
         </div>
       ))}
 
-<Modal className="bg-white" title="Bạn có chắc muốn xóa bài báo này ?" open={open} onOpenChange={setOpen}>
+      <Modal
+        className="bg-white"
+        title="Bạn có chắc muốn xóa bài báo này ?"
+        open={open}
+        onOpenChange={setOpen}
+      >
         <div className="px-10">
-        <p>
-          Hành động này sẽ không thể quay lại
-        </p>
-        <div className="flex justify-end mt-5"><button onClick={() => {console.log(selectedDeletePostId.current); deletePost(selectedDeletePostId.current); setOpen(false)}} className="bg-red-500 text-white px-3 py-2 rounded-lg">Xóa</button></div>
+          <p>Hành động này sẽ không thể quay lại</p>
+          <div className="flex justify-end mt-5">
+            <button
+              onClick={() => {
+                console.log(selectedDeletePostId.current);
+                deletePost(selectedDeletePostId.current);
+                setOpen(false);
+              }}
+              className="bg-red-500 text-white px-3 py-2 rounded-lg"
+            >
+              Xóa
+            </button>
+          </div>
         </div>
-        
       </Modal>
     </div>
   );

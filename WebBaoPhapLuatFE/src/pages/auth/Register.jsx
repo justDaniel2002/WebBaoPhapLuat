@@ -34,7 +34,10 @@ export default function Register() {
 
     SignUp({ email, password })
       .then(() => {
-        toast.success("Đăng ký thành công");
+        if(res==null){
+          toast.error("Đăng ký thất bại");
+        }
+        else toast.success("Đăng ký thành công");
         navigate("/auth/login");
       })
       .catch(() => toast.error("Đăng ký thất bại"));

@@ -30,7 +30,10 @@ export const Login = () => {
 
     SignIn({ email, password })
       .then((res) => {
-        toast.success("Đăng nhập thành công");
+        if(res==null){
+          toast.error("Đăng nhập thất bại");
+        }
+        else toast.success("Đăng nhập thành công");
         setAccount(res);
         if (res?.roleId==3) {
           navigate("/");

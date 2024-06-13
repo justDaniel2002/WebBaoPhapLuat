@@ -45,7 +45,7 @@ export const Home = () => {
         </div>
         <div className="w-2/4 px-2">
           <div
-            onClick={() => navigate(`/PostDetail/${post.postId}`)}
+            onClick={() => navigate(`/PostDetail/${posts[3].postId}`)}
             className="text-wrap truncate text-center"
           >
             {posts[3]?.imageURL ? (
@@ -94,7 +94,7 @@ export const Home = () => {
               {tag?.tagName?.toUpperCase()}
             </div>
 
-            {tag?.Post[0]?<div onClick={() => navigate(`/PostDetail/${post.postId}`)} className="flex items-center">
+            {tag?.Post[0]?<div onClick={() => navigate(`/PostDetail/${tag?.Post[0].postId}`)} className="flex items-center">
               <div className="w-1/2 mr-10">
                 <img className="mb-5 w-full" src={tag?.Post[0]?.imageURL ?? logo} />
               </div>
@@ -111,7 +111,7 @@ export const Home = () => {
             <div className="flex mt-10 justify-around">
               {tag?.Post?.slice(1, 4)?.map((p) => (
                 <div
-                  onClick={() => navigate(`/PostDetail/${post.postId}`)}
+                  onClick={() => navigate(`/PostDetail/${p.postId}`)}
                   className="hover:-translate-y-5 transition-all rounded-xl border w-3/12 pb-3 shadow-2xl mr-5 mb-10 flex flex-col justify-between"
                 >
                   <img className="mb-5" src={p?.imageURL ?? logo} />

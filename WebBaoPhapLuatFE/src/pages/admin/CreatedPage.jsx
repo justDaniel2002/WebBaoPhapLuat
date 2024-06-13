@@ -10,6 +10,7 @@ import { delApi, getApi } from "../../api/service";
 import { accountState } from "../../state/AccountState";
 import { useRecoilState } from "recoil";
 import { Modal } from "rc-modal-sheet";
+import { toast } from "react-toastify";
 
 export default function CreatedPostPage() {
   const [account, setAccount] = useRecoilState(accountState);
@@ -25,8 +26,9 @@ export default function CreatedPostPage() {
 
   const deletePost = (id) => {
     delApi(get_del_edit_PostById, id).then(() => {
+      toast.success("Đã xóa bài đăng")
       getApi(getPosts).then((res) => setPosts(res));
-    });
+    }).catch(() => toast.error("Xóa bài đăng thất bại"));;
   };
   return (
     <div className="pt-20 px-10 flex flex-wrap">

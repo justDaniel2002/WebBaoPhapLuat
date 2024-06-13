@@ -8,6 +8,7 @@ export const getPostByInnerTag = `${getPosts}/getPostByInnerTag/`
 export const uploadPost = `${getPosts}/upload`
 export const searchPost = `${getPosts}/search/`
 export const getPostsByAuthor = `${getPosts}/author/`
+export const addView = `${getPosts}/view`
 
 export const getCategories = `${host}/categories`
 export const getCategoryById = `${host}/categories/`

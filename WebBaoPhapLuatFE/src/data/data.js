@@ -59,8 +59,12 @@ export const MenuAdmin = [
     link: "Admin",
   },
   {
-    content: "Đăng bài",
+    content: "Đăng bài qua file excel",
     link: "createPost",
+  },
+  {
+    content: "Đăng bài",
+    link:"createOnePost"
   },
   {
     content: "Các bài đã tạo",

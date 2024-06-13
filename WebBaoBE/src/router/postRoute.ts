@@ -1,4 +1,4 @@
-import { PostFilterCategory, PostFilterTag, PostsFilterInnerTag, SearchPost, delPost, getPosts, getPostsByAuthor, getPtById, handleExcelFileRequest, updatePost } from "../controllers/PostsController";
+import { PostFilterCategory, PostFilterTag, PostsFilterInnerTag, SearchPost, addView, createPost, delPost, getPosts, getPostsByAuthor, getPtById, handleExcelFileRequest, updatePost } from "../controllers/PostsController";
 import multer from 'multer';
 import PromiseRouter from "express-promise-router";
 
@@ -17,7 +17,9 @@ postRoute.route("/search/:search").get(SearchPost)
 
 postRoute.route("/author/:id").get(getPostsByAuthor)
 
-postRoute.route("/").get(getPosts)
+postRoute.route("/view").post(addView)
+
+postRoute.route("/").get(getPosts).post(createPost)
 
 postRoute.route("/:id").get(getPtById).put(updatePost).delete(delPost)
 

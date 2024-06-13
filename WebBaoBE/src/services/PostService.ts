@@ -1,4 +1,4 @@
-import { Post } from "@prisma/client";
+import { Post, PostView } from "@prisma/client";
 import PrismaService from "./prisma";
 import xlsx from "xlsx";
 import fs from "fs";
@@ -6,7 +6,12 @@ import fs from "fs";
 const prisma = PrismaService.getInstance();
 
 export const getAllPost = async () => {
-  const posts = await prisma.post.findMany();
+  const posts = await prisma.post.findMany({
+    include:{
+      PostView: true,
+      Comment: true
+    }
+  });
   return posts;
 };
 
@@ -22,6 +27,7 @@ export const getPostById = async (id: number) => {
           InnerTag: true,
         }
       },
+      PostView: true,
     },
   });
   return posts;
@@ -45,6 +51,26 @@ export const addManyPosts = async (posts: Post[]) => {
   });
 };
 
+export const addPost = async (post: any) => {
+  try {
+    await prisma.post.create({
+      data: {
+        title: post.title,
+        imageURL: post.imageURL,
+        content: post.content,
+        createdDate: post.createdDate,
+        description: post.description,
+        categoryId: post.categoryId,
+        tagId: post?.tagId??1,
+        innerTagId: post?.innerTagId??1,
+        createdBy: post?.createdBy??1
+      },
+    });
+  } catch (error) {
+    console.log(error)
+  }
+};
+
 export const editPost = async (post: any, id: number) => {
   try {
     await prisma.post.update({
@@ -58,6 +84,8 @@ export const editPost = async (post: any, id: number) => {
         createdDate: post.createdDate,
         description: post.description,
         categoryId: post.categoryId,
+        tagId: post?.tagId??1,
+        innerTagId: post?.innerTagId??1
       },
     });
   } catch (error) {
@@ -73,6 +101,11 @@ export const deletePost = async (id: number) => {
     //     postId: id
     //   }
     // })
+    await prisma.comment.deleteMany({
+      where:{
+        postId: id
+      }
+    })
     await prisma.post.delete({
       where: {
         postId: id,
@@ -141,3 +174,9 @@ export const getPostByAccountId = async (id: number) => {
   });
   return posts;
 };
+
+export const addViewPost = async (view: PostView) => {
+  await prisma.postView.create({
+    data: view
+  })
+}
