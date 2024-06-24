@@ -59,6 +59,10 @@ export const MenuAdmin = [
     link: "Admin",
   },
   {
+    content: "Quản lý người dùng",
+    link: "userManager",
+  },
+  {
     content: "Đăng bài qua file excel",
     link: "createPost",
   },

@@ -1,25 +1,46 @@
-import { PostFilterCategory, PostFilterTag, PostsFilterInnerTag, SearchPost, addView, createPost, delPost, getPosts, getPostsByAuthor, getPtById, handleExcelFileRequest, updatePost } from "../controllers/PostsController";
-import multer from 'multer';
+import {
+  PostFilterCategory,
+  PostFilterTag,
+  PostsFilterInnerTag,
+  SearchPost,
+  addView,
+  browsePost,
+  changeFavorPost,
+  createPost,
+  delPost,
+  getFavorPost,
+  getPosts,
+  getPostsByAuthor,
+  getPtById,
+  handleExcelFileRequest,
+  updatePost,
+} from "../controllers/PostsController";
+import multer from "multer";
 import PromiseRouter from "express-promise-router";
 
-export const postRoute = PromiseRouter()
-const upload = multer({ dest: 'uploads/' });
+export const postRoute = PromiseRouter();
+const upload = multer({ dest: "uploads/" });
 
-postRoute.route("/getPostByCate/:id").get(PostFilterCategory)
+postRoute.route("/getPostByCate/:id").get(PostFilterCategory);
 
-postRoute.route("/getPostByTag/:id").get(PostFilterTag)
+postRoute.route("/getPostByTag/:id").get(PostFilterTag);
 
-postRoute.route("/getPostByInnerTag/:id").get(PostsFilterInnerTag)
+postRoute.route("/getPostByInnerTag/:id").get(PostsFilterInnerTag);
 
-postRoute.route("/upload").post(upload.single('file'), handleExcelFileRequest)
+postRoute.route("/search/:search").get(SearchPost);
 
-postRoute.route("/search/:search").get(SearchPost)
+postRoute.route("/author/:id").get(getPostsByAuthor);
 
-postRoute.route("/author/:id").get(getPostsByAuthor)
+postRoute.route("/browse/:id").put(browsePost);
 
-postRoute.route("/view").post(addView)
+postRoute.route("/favor/:id").get(getFavorPost)
 
-postRoute.route("/").get(getPosts).post(createPost)
+postRoute.route("/upload").post(upload.single("file"), handleExcelFileRequest);
 
-postRoute.route("/:id").get(getPtById).put(updatePost).delete(delPost)
+postRoute.route("/favor").put(changeFavorPost);
 
+postRoute.route("/view").post(addView);
+
+postRoute.route("/").get(getPosts).post(createPost);
+
+postRoute.route("/:id").get(getPtById).put(updatePost).delete(delPost);

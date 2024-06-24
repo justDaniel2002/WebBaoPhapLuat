@@ -26,6 +26,8 @@ import { motion } from "framer-motion";
 import { ModalStackContainer } from "rc-modal-sheet";
 import "rc-modal-sheet/dist/index.css"
 import AddOnePostPage from "./pages/admin/AddOnePostPage";
+import FavorPost from "./pages/user/FavorPost";
+import UserManager from "./pages/admin/UserManager";
 
 function App() {
   const router = createBrowserRouter(
@@ -39,6 +41,7 @@ function App() {
         <Route element={<AdminLayout />}>
           <Route path="Admin" element={<AdminPage />} />
           <Route path="createPost" element={<AddPostPage />} />
+          <Route path="userManager" element={<UserManager />} />
           <Route path="createOnePost" element={<AddOnePostPage />} />
           <Route path="createdPost" element={<CreatedPostPage />} />
           <Route path="createdPost/EditPost/:id" element={<EditPostPage />} />
@@ -51,6 +54,7 @@ function App() {
           <Route path="PostByInnerTag/:id" element={<PostByInnerTag />} />
           <Route path="PostDetail/:id" element={<PostDetail />} />
           <Route path="SearchPosts/:search" element={<SearchPosts />} />
+          <Route path="FavorPosts" element={<FavorPost />} />
         </Route>
       </Route>
     )

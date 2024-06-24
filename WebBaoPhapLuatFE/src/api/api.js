@@ -9,6 +9,8 @@ export const uploadPost = `${getPosts}/upload`
 export const searchPost = `${getPosts}/search/`
 export const getPostsByAuthor = `${getPosts}/author/`
 export const addView = `${getPosts}/view`
+export const favorPosts = `${getPosts}/favor`
+export const get_putFavorPosts = `${getPosts}/favor/`
 
 export const getCategories = `${host}/categories`
 export const getCategoryById = `${host}/categories/`
@@ -23,3 +25,5 @@ export const addComment = `${host}/comments/add`
 
 export const signIn = `${host}/auth/signIn`
 export const signUp = `${host}/auth/signUp`
+export const getUsers = `${host}/auth/users`
+export const banUser = `${host}/auth/banUser/`

@@ -7,10 +7,10 @@ const prisma = PrismaService.getInstance();
 
 export const getAllPost = async () => {
   const posts = await prisma.post.findMany({
-    include:{
+    include: {
       PostView: true,
-      Comment: true
-    }
+      Comment: true,
+    },
   });
   return posts;
 };
@@ -23,9 +23,9 @@ export const getPostById = async (id: number) => {
     include: {
       Category: true,
       Tag: {
-        include:{
+        include: {
           InnerTag: true,
-        }
+        },
       },
       PostView: true,
     },
@@ -52,6 +52,13 @@ export const addManyPosts = async (posts: Post[]) => {
 };
 
 export const addPost = async (post: any) => {
+  const aid = post?.createdBy;
+  const account = await prisma.account.findUnique({
+    where: { accountId: aid },
+  });
+
+  const isAdmin = account?.roleId == 1;
+
   try {
     await prisma.post.create({
       data: {
@@ -61,13 +68,14 @@ export const addPost = async (post: any) => {
         createdDate: post.createdDate,
         description: post.description,
         categoryId: post.categoryId,
-        tagId: post?.tagId??1,
-        innerTagId: post?.innerTagId??1,
-        createdBy: post?.createdBy??1
+        tagId: post?.tagId ?? 1,
+        innerTagId: post?.innerTagId ?? 1,
+        createdBy: post?.createdBy ?? 1,
+        status: isAdmin ? true : false,
       },
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
@@ -84,17 +92,16 @@ export const editPost = async (post: any, id: number) => {
         createdDate: post.createdDate,
         description: post.description,
         categoryId: post.categoryId,
-        tagId: post?.tagId??1,
-        innerTagId: post?.innerTagId??1
+        tagId: post?.tagId ?? 1,
+        innerTagId: post?.innerTagId ?? 1,
       },
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
 export const deletePost = async (id: number) => {
-  
   try {
     // await prisma.postTag.deleteMany({
     //   where:{
@@ -102,30 +109,30 @@ export const deletePost = async (id: number) => {
     //   }
     // })
     await prisma.comment.deleteMany({
-      where:{
-        postId: id
-      }
-    })
+      where: {
+        postId: id,
+      },
+    });
     await prisma.post.delete({
       where: {
         postId: id,
       },
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
-export const getPostsByInnerTag = async (innerTagId:number) => {
+export const getPostsByInnerTag = async (innerTagId: number) => {
   const posts = await prisma.post.findMany({
-    where:{
-      innerTagId
+    where: {
+      innerTagId,
     },
-    include:{
+    include: {
       Category: true,
       Tag: true,
       InnerTag: true,
-    }
+    },
   });
 
   return posts;
@@ -136,25 +143,25 @@ export const getPostByCategory = async (categoryId: number) => {
     where: {
       categoryId,
     },
-    include:{
+    include: {
       Category: true,
       Tag: true,
       InnerTag: true,
-    }
+    },
   });
   return posts;
 };
 
 export const getPostByTag = async (tagId: number) => {
   const posts = await prisma.post.findMany({
-    where:{
-      tagId
+    where: {
+      tagId,
     },
-    include:{
+    include: {
       Category: true,
       Tag: true,
       InnerTag: true,
-    }
+    },
   });
 
   return posts;
@@ -177,6 +184,57 @@ export const getPostByAccountId = async (id: number) => {
 
 export const addViewPost = async (view: PostView) => {
   await prisma.postView.create({
-    data: view
+    data: view,
+  });
+};
+
+export const favoritePostHandle = async (postId: number, accountId: number) => {
+  const isFavor = await prisma.favoritePost.findFirst({
+    where: {
+      accountId,
+      postId,
+    },
+  });
+
+  if (isFavor) {
+    await prisma.favoritePost.deleteMany({
+      where: {
+        accountId,
+        postId,
+      },
+    });
+    return;
+  } else {
+    await prisma.favoritePost.create({
+      data: {
+        accountId,
+        postId,
+      },
+    });
+  }
+};
+
+export const changePostStatus = async (postId: number) => {
+  const post = await prisma.post.findUnique({ where: { postId } });
+
+  await prisma.post.update({
+    data: { ...post, status: !post?.status },
+    where: { postId },
+  });
+};
+
+export const getAllFavorPosts = async (accountId:number) => {
+  const favorPosts = await prisma.post.findMany({
+    where:{
+      FavoritePost:{
+        some:{
+          accountId
+        }
+      }
+    }
   })
+
+  return favorPosts;
 }
+
+

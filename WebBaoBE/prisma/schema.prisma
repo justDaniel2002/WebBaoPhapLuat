@@ -8,17 +8,19 @@ datasource db {
 }
 
 model Account {
-  accountId   Int        @id(map: "PK_Account") @default(autoincrement())
-  email       String?    @db.VarChar(Max)
-  password    String?    @db.VarChar(Max)
-  facebookURL String?    @db.VarChar(Max)
-  facebookId  String?    @db.VarChar(Max)
-  roleId      Int?
-  createdDate DateTime?  @default(now(), map: "DF_Account_createdDate") @db.DateTime
-  Role        Role?      @relation(fields: [roleId], references: [roleId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Account_Role")
-  Comment     Comment[]
-  Post        Post[]
-  PostView    PostView[]
+  accountId    Int            @id(map: "PK_Account") @default(autoincrement())
+  email        String?        @db.VarChar(Max)
+  password     String?        @db.VarChar(Max)
+  facebookURL  String?        @db.VarChar(Max)
+  facebookId   String?        @db.VarChar(Max)
+  roleId       Int?
+  createdDate  DateTime?      @default(now(), map: "DF_Account_createdDate") @db.DateTime
+  status       Boolean?       @default(true, map: "DF_Account_status")
+  Role         Role?          @relation(fields: [roleId], references: [roleId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Account_Role")
+  Comment      Comment[]
+  FavoritePost FavoritePost[]
+  Post         Post[]
+  PostView     PostView[]
 }
 
 model Category {
@@ -29,22 +31,24 @@ model Category {
 }
 
 model Post {
-  postId      Int        @id(map: "PK_Post") @default(autoincrement())
-  title       String?    @db.NVarChar(Max)
-  imageURL    String?    @db.VarChar(Max)
-  content     String?    @db.NVarChar(Max)
-  createdDate DateTime?  @default(now(), map: "DF_Post_createdDate") @db.DateTime
-  createdBy   Int?
-  categoryId  Int?
-  tagId       Int?
-  innerTagId  Int?
-  description String?    @db.NVarChar(Max)
-  Comment     Comment[]
-  Account     Account?   @relation(fields: [createdBy], references: [accountId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Account")
-  Category    Category?  @relation(fields: [categoryId], references: [categoryId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Category")
-  InnerTag    InnerTag?  @relation(fields: [innerTagId], references: [innerTagId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_InnerTag")
-  Tag         Tag?       @relation(fields: [tagId], references: [tagId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Tag")
-  PostView    PostView[]
+  postId       Int            @id(map: "PK_Post") @default(autoincrement())
+  title        String?        @db.NVarChar(Max)
+  imageURL     String?        @db.VarChar(Max)
+  content      String?        @db.NVarChar(Max)
+  createdDate  DateTime?      @default(now(), map: "DF_Post_createdDate") @db.DateTime
+  createdBy    Int?
+  categoryId   Int?
+  tagId        Int?
+  innerTagId   Int?
+  description  String?        @db.NVarChar(Max)
+  status       Boolean?       @default(true, map: "DF_Post_status")
+  Comment      Comment[]
+  FavoritePost FavoritePost[]
+  Account      Account?       @relation(fields: [createdBy], references: [accountId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Account")
+  Category     Category?      @relation(fields: [categoryId], references: [categoryId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Category")
+  InnerTag     InnerTag?      @relation(fields: [innerTagId], references: [innerTagId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_InnerTag")
+  Tag          Tag?           @relation(fields: [tagId], references: [tagId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Post_Tag")
+  PostView     PostView[]
 }
 
 model Role {
@@ -78,8 +82,6 @@ model PostView {
   viewDate  DateTime? @default(now(), map: "DF_PostView_viewDate") @db.DateTime
   Account   Account?  @relation(fields: [accountId], references: [accountId], onDelete: NoAction, onUpdate: NoAction, map: "FK_PostView_Account")
   Post      Post?     @relation(fields: [postId], references: [postId], onDelete: NoAction, onUpdate: NoAction, map: "FK_PostView_Post")
-
-  
 }
 
 model Comment {
@@ -98,4 +100,13 @@ model InnerTag {
   innerTagName String? @db.NVarChar(Max)
   Tag          Tag?    @relation(fields: [tagId], references: [tagId], onDelete: NoAction, onUpdate: NoAction, map: "FK_InnerTag_Tag")
   Post         Post[]
+}
+
+model FavoritePost {
+  accountId Int
+  postId    Int
+  Account   Account @relation(fields: [accountId], references: [accountId], onUpdate: NoAction, map: "FK_FavoritePost_Account")
+  Post      Post    @relation(fields: [postId], references: [postId], onUpdate: NoAction, map: "FK_FavoritePost_Post")
+
+  @@id([accountId, postId], map: "PK_FavoritePost")
 }

@@ -30,12 +30,17 @@ export const Login = () => {
 
     SignIn({ email, password })
       .then((res) => {
-        if(res==null){
+        if (res == null) {
           toast.error("Đăng nhập thất bại");
+          return;
+        } 
+        if(!res?.status){
+          toast.error("Tài khoản bạn đã ngưng hoạt động")
+          return
         }
-        else toast.success("Đăng nhập thành công");
+        toast.success("Đăng nhập thành công");
         setAccount(res);
-        if (res?.roleId==3) {
+        if (res?.roleId == 3) {
           navigate("/");
         } else if (res?.roleId == 1 || res?.roleId == 2) {
           navigate("/Admin");

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addManyPosts, addPost, addViewPost, deletePost, editPost, getAllPost, getPostByAccountId, getPostByCategory, getPostById, getPostByTag, getPostByTitle, getPostsByInnerTag, readFileExcelPost } from "../services/PostService"
+import { addManyPosts, addPost, addViewPost, changePostStatus, deletePost, editPost, favoritePostHandle, getAllFavorPosts, getAllPost, getPostByAccountId, getPostByCategory, getPostById, getPostByTag, getPostByTitle, getPostsByInnerTag, readFileExcelPost } from "../services/PostService"
 import { Post } from "@prisma/client";
 
 export const getPosts = async (req: Request, res: Response) => {
@@ -106,3 +106,36 @@ export const getPostsByAuthor  = async (req: Request, res: Response) => {
     const result = await getPostByAccountId(parseInt(id))
     res.status(200).json(result)
 }
+
+export const changeFavorPost = async (req: Request, res: Response) => {
+    const {postId, accountId} = req.body
+
+    try {
+        await favoritePostHandle(postId, accountId)
+        res.status(200).send("change favor post successfully")
+    } catch (error:any) {
+        res.status(500).send(error.message)
+    }
+}
+
+
+export const getFavorPost = async (req: Request, res: Response) => {
+    const accountId = req.params.id
+    try {
+        const posts = await getAllFavorPosts(parseInt(accountId))
+        res.status(200).json(posts)
+    } catch (error:any) {
+        res.status(500).send(error.message)
+    }
+}
+
+export const browsePost = async (req: Request, res: Response) => {
+    const id = req.params.id
+
+    try {
+        await changePostStatus(parseInt(id))
+        res.status(200).send("change post status successfully")
+    } catch (error:any) {
+        res.status(500).send(error.message)
+    }
+} 

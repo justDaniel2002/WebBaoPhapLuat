@@ -1,9 +1,14 @@
 import { Request, Response } from "express";
-import { addComment, deleteComment, getCommentByPostId } from "../services/CommentService";
+import { addComment, deleteComment, getCommentByPostId, getCommentsForManager } from "../services/CommentService";
 
 export const getComments = async(req:Request, res:Response) => {
     const id = req.params.id
     const result = await getCommentByPostId(parseInt(id))
+    res.status(200).json(result)
+}
+
+export const getAllComments = async(req:Request, res:Response) => {
+    const result = await getCommentsForManager()
     res.status(200).json(result)
 }
 

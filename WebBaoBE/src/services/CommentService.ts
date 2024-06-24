@@ -28,3 +28,8 @@ export const deleteComment = async(commentId:number) => {
         }
     })
 }
+
+export const getCommentsForManager = async() => {
+    const comments = prisma.comment.findMany()
+    return comments
+}
