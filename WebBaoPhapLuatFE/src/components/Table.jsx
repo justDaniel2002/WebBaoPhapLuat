@@ -46,7 +46,34 @@ export const userManagerHeader = [
   },
 ];
 
-export const Table = ({ headers, datas, statusFunction }) => (
+export const commentManagerHeader = [
+  {
+    content:"Nội dung",
+    id:"content",
+    width:"w-2/6",
+    format:(data) => <div className="">{data?.content}</div>
+  },
+  {
+    content:"Ngày tạo",
+    id:"createdDate",
+    width:"w-1/6",
+    format:(data) => <div>{formatDate(data?.createdDate)}</div>
+  },
+  {
+    content:"Người tạo",
+    id:"accountId",
+    width:"w-1/6",
+    format:(data) => <div>{data?.Account?.email}</div>
+  },
+  {
+    content:"Bài viết",
+    id:"postId",
+    width:"w-2/6",
+    format:(data) => <div className="">{data?.Post?.title}</div>
+  }
+]
+
+export const Table = ({ headers, datas, ActionTd=undefined }) => (
   <table>
     <thead>
       <tr className="bg-slate-300">
@@ -54,7 +81,7 @@ export const Table = ({ headers, datas, statusFunction }) => (
         {headers.map((head) => (
           <th className={`${head.width} py-2`}>{head.content}</th>
         ))}
-        <th></th>
+        {ActionTd&&<th></th>}
       </tr>
     </thead>
     <tbody className="text-sm">
@@ -62,11 +89,9 @@ export const Table = ({ headers, datas, statusFunction }) => (
         <tr>
           <td className="px-2 border">{index + 1}</td>
           {headers.map((head) => (
-            <td className="px-3 py-3 border">{head?.format ? head.format(data) : data[head.id]}</td>
+            <td className={`px-3 py-3 border ${head.width}`}>{head?.format ? head.format(data) : data[head.id]}</td>
           ))}
-          <td className="px-2 min-w-20 border">
-            <button onClick={() => statusFunction(data?.accountId)} className={`${data?.status ? "bg-red-500" : "bg-green-500"} text-white px-3 py-2 rounded-xl`}>{data?.status ? "De-active" : "Active"}</button>
-          </td>
+          {ActionTd&&<ActionTd data={data}/>}
         </tr>
       ))}
     </tbody>

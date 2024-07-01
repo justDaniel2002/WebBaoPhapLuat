@@ -11,6 +11,8 @@ export const getPostsByAuthor = `${getPosts}/author/`
 export const addView = `${getPosts}/view`
 export const favorPosts = `${getPosts}/favor`
 export const get_putFavorPosts = `${getPosts}/favor/`
+export const changePostStatus = `${getPosts}/browse/`
+export const getStaticInfo = `${getPosts}/static`
 
 export const getCategories = `${host}/categories`
 export const getCategoryById = `${host}/categories/`

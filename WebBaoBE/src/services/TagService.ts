@@ -5,7 +5,11 @@ const prisma = PrismaService.getInstance();
 export const getAllTags = async () => {
     const tags = await prisma.tag.findMany({
         include:{
-            Post: true,
+            Post: {
+                where:{
+                    status: true
+                }
+            },
             InnerTag: true
         }
     });

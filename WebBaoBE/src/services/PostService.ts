@@ -57,7 +57,7 @@ export const addPost = async (post: any) => {
     where: { accountId: aid },
   });
 
-  const isAdmin = account?.roleId == 1;
+  const isAdmin = account?.roleId == 3;
 
   try {
     await prisma.post.create({
@@ -127,6 +127,7 @@ export const getPostsByInnerTag = async (innerTagId: number) => {
   const posts = await prisma.post.findMany({
     where: {
       innerTagId,
+      status: true
     },
     include: {
       Category: true,
@@ -142,6 +143,7 @@ export const getPostByCategory = async (categoryId: number) => {
   const posts = await prisma.post.findMany({
     where: {
       categoryId,
+      status: true
     },
     include: {
       Category: true,
@@ -156,6 +158,7 @@ export const getPostByTag = async (tagId: number) => {
   const posts = await prisma.post.findMany({
     where: {
       tagId,
+      status: true
     },
     include: {
       Category: true,
@@ -169,7 +172,7 @@ export const getPostByTag = async (tagId: number) => {
 
 export const getPostByTitle = async (title: string) => {
   let posts = await prisma.post.findMany();
-  posts = posts.filter((p) => p.title?.includes(title));
+  posts = posts.filter((p) => p.title?.includes(title)&&p.status);
   return posts;
 };
 
@@ -218,7 +221,7 @@ export const changePostStatus = async (postId: number) => {
   const post = await prisma.post.findUnique({ where: { postId } });
 
   await prisma.post.update({
-    data: { ...post, status: !post?.status },
+    data: { status: !post?.status },
     where: { postId },
   });
 };
@@ -235,6 +238,22 @@ export const getAllFavorPosts = async (accountId:number) => {
   })
 
   return favorPosts;
+}
+
+export const getStaticInfo = async() => {
+  const posts = await prisma.post.findMany()
+  const comments = await prisma.comment.findMany()
+  const accounts = await prisma.account.findMany()
+  const postView = await prisma.postView.findMany()
+
+  return {
+    posts: posts.length,
+    browsedPosts: posts.filter(p => p.status).length,
+    comments: comments.length,
+    accounts: accounts.length,
+    users: accounts.filter(a => a.roleId==3).length,
+    views: postView.length
+  }
 }
 
 

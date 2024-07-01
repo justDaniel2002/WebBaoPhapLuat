@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import { addManyPosts, addPost, addViewPost, changePostStatus, deletePost, editPost, favoritePostHandle, getAllFavorPosts, getAllPost, getPostByAccountId, getPostByCategory, getPostById, getPostByTag, getPostByTitle, getPostsByInnerTag, readFileExcelPost } from "../services/PostService"
+import { addManyPosts, addPost, addViewPost, changePostStatus, deletePost, editPost, favoritePostHandle, getAllFavorPosts, getAllPost, getPostByAccountId, getPostByCategory, getPostById, getPostByTag, getPostByTitle, getPostsByInnerTag, getStaticInfo, readFileExcelPost } from "../services/PostService"
 import { Post } from "@prisma/client";
+import PrismaService from "../services/prisma";
+const prisma = PrismaService.getInstance();
 
 export const getPosts = async (req: Request, res: Response) => {
     const result = await getAllPost()
@@ -23,7 +25,12 @@ export const handleExcelFileRequest = async(req: Request, res: Response) => {
 
     try {
         let posts:Post[] = await readFileExcelPost(filePath)
-        posts = posts.map(p => {p.createdBy = parseInt(userId); return p});
+        const account = await prisma.account.findUnique({
+            where: { accountId: parseInt(userId) },
+          });
+
+        const isAdmin = account?.roleId==3
+        posts = posts.map(p => {p.createdBy = parseInt(userId); p.status=isAdmin; return p});
         await addManyPosts(posts);
         
         res.status(200).json(posts)
@@ -139,3 +146,8 @@ export const browsePost = async (req: Request, res: Response) => {
         res.status(500).send(error.message)
     }
 } 
+
+export const getStatisticInformation = async (req: Request, res: Response) => {
+    const result = await getStaticInfo()
+    res.status(200).json(result)
+}

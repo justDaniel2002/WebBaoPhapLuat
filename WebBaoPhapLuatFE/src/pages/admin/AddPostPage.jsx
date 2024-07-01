@@ -62,7 +62,7 @@ export default function AddPostPage() {
     addPost(File, account.accountId)
       .then(() => {
         toast.success("Đăng báo thành công");
-        navigate("/Admin")
+        if(account?.roleId==3) navigate("/Admin")
       })
       .catch(() => toast.error("Đăng báo thất bại"));
   };

@@ -42,8 +42,10 @@ export const Login = () => {
         setAccount(res);
         if (res?.roleId == 3) {
           navigate("/");
-        } else if (res?.roleId == 1 || res?.roleId == 2) {
+        } else if (res?.roleId == 1 ) {
           navigate("/Admin");
+        }else if (res?.roleId == 2) {
+          navigate("/commentManager");
         }
       })
       .catch(() => toast.error("Đăng nhập thất bại"));

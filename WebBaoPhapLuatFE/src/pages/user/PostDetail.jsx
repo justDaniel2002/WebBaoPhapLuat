@@ -22,7 +22,7 @@ export default function PostDetail() {
   const [otherPost, setOther] = useState([]);
   const [comments, setComments] = useState([]);
   const [isFavor, setIsFavor] = useState(false);
-  const [FavorPosts, setFavorPosts] = useState([])
+  const [FavorPosts, setFavorPosts] = useState([]);
 
   const params = useParams();
   const id = params.id;
@@ -39,12 +39,9 @@ export default function PostDetail() {
       getApi(get_del_comment, res.postId).then((res3) => setComments(res3));
 
       getApi(get_putFavorPosts, account.accountId).then((res4) => {
-        const favorPost = res4.find(
-          (fp) => fp.postId == res.postId
-        );
+        const favorPost = res4.find((fp) => fp.postId == res.postId);
         setIsFavor(favorPost ? true : false);
-      })
-     
+      });
     });
   }, [id]);
   return (
@@ -65,33 +62,35 @@ export default function PostDetail() {
             dangerouslySetInnerHTML={{ __html: post?.content }}
             className="text-neutral-500"
           ></div>
-          <div className="flex items-center justify-end">
-            {isFavor ? (
-              <div
-                onClick={() =>
-                  putApi(get_putFavorPosts, {
-                    accountId: account.accountId,
-                    postId: post.postId,
-                  }).then(() => setIsFavor(false))
-                }
-                className="flex justify-end text-red-700 items-center"
-              >
-                <Icon icon="material-symbols:bookmark" /> Đã yêu thích
-              </div>
-            ) : (
-              <div
-                className="flex justify-end items-center"
-                onClick={() =>
-                  putApi(get_putFavorPosts, {
-                    accountId: account.accountId,
-                    postId: post.postId,
-                  }).then(() => setIsFavor(true))
-                }
-              >
-                <Icon icon="material-symbols:bookmark" /> Thêm vào yêu thích
-              </div>
-            )}
-          </div>
+          {account && (
+            <div className="flex items-center justify-end">
+              {isFavor ? (
+                <div
+                  onClick={() =>
+                    putApi(get_putFavorPosts, {
+                      accountId: account.accountId,
+                      postId: post.postId,
+                    }).then(() => setIsFavor(false))
+                  }
+                  className="flex justify-end text-red-700 items-center"
+                >
+                  <Icon icon="material-symbols:bookmark" /> Đã yêu thích
+                </div>
+              ) : (
+                <div
+                  className="flex justify-end items-center"
+                  onClick={() =>
+                    putApi(get_putFavorPosts, {
+                      accountId: account.accountId,
+                      postId: post.postId,
+                    }).then(() => setIsFavor(true))
+                  }
+                >
+                  <Icon icon="material-symbols:bookmark" /> Thêm vào yêu thích
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <div className="w-2/6 pl-5 max-h-screen overflow-y-auto">
           <div className="text-2xl font-medium mb-5">

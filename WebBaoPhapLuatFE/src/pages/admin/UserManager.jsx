@@ -1,26 +1,48 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Table, userManagerHeader } from "../../components/Table";
 import { getApi, putApi } from "../../api/service";
 import { banUser, getUsers } from "../../api/api";
+import { toast } from "react-toastify";
 
 export default function UserManager() {
   const [users, setUsers] = useState([]);
 
   const getUser = useCallback(() => {
     getApi(getUsers).then((result) => setUsers(result));
-  })
+  },[]);
 
   const changeUserStatus = useCallback((id) => {
-    putApi(banUser,{}, id).then(() => {
-      getUser()
-    })
-  })
+    putApi(banUser, {}, id).then(() => {
+      getUser();
+    });
+  },[]);
+
+  const ActionTd = useCallback(({ data={} }) => (
+    <td className="px-2 min-w-20 border">
+      <button
+        onClick={() => {
+          changeUserStatus(data?.accountId)
+          toast.success("Đã thay đổi trạng thái người dùng")
+        }}
+        className={`${
+          data?.status ? "bg-red-500" : "bg-green-500"
+        } text-white px-3 py-2 rounded-xl`}
+      >
+        {data?.status ? "De-active" : "Active"}
+      </button>
+    </td>
+  ), [users])
+
   useEffect(() => {
-    getUser()
+    getUser();
   }, []);
   return (
     <div className="pt-40 px-20">
-      <Table statusFunction={changeUserStatus} headers={userManagerHeader} datas={users}></Table>
+      <Table
+        ActionTd={ActionTd}
+        headers={userManagerHeader}
+        datas={users}
+      ></Table>
     </div>
   );
 }

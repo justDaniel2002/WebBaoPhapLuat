@@ -76,6 +76,25 @@ export const MenuAdmin = [
   },
 ];
 
+export const MenuManager = [
+  {
+    content: "Đăng bài qua file excel",
+    link: "createPost",
+  },
+  {
+    content: "Đăng bài",
+    link:"createOnePost"
+  },
+  {
+    content: "Các bài đã tạo",
+    link: "createdPost",
+  },
+  {
+    content: "Quản lý bình luận",
+    link: "commentManager",
+  },
+];
+
 export const EmptyAvatar =
   "https://i.pinimg.com/originals/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.webp";
 

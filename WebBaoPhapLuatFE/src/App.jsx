@@ -28,6 +28,7 @@ import "rc-modal-sheet/dist/index.css"
 import AddOnePostPage from "./pages/admin/AddOnePostPage";
 import FavorPost from "./pages/user/FavorPost";
 import UserManager from "./pages/admin/UserManager";
+import CommentManager from "./pages/admin/CommentManager";
 
 function App() {
   const router = createBrowserRouter(
@@ -44,6 +45,7 @@ function App() {
           <Route path="userManager" element={<UserManager />} />
           <Route path="createOnePost" element={<AddOnePostPage />} />
           <Route path="createdPost" element={<CreatedPostPage />} />
+          <Route path="commentManager" element={<CommentManager />} />
           <Route path="createdPost/EditPost/:id" element={<EditPostPage />} />
         </Route>
 

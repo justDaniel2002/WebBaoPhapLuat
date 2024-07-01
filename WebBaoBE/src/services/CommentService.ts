@@ -30,6 +30,11 @@ export const deleteComment = async(commentId:number) => {
 }
 
 export const getCommentsForManager = async() => {
-    const comments = prisma.comment.findMany()
+    const comments = await prisma.comment.findMany({
+        include:{
+            Account:true,
+            Post:true
+        }
+    })
     return comments
 }

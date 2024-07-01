@@ -10,7 +10,7 @@ export const Home = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    getApi(getPosts).then((res) => setPosts(res));
+    getApi(getPosts).then((res) => setPosts(res.filter(p => p?.status)));
     getApi(getTags).then((res) => {
       console.log("tag", res);
       setTags(res);
