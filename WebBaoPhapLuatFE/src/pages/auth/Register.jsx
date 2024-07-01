@@ -33,7 +33,8 @@ export default function Register() {
     }
 
     SignUp({ email, password })
-      .then(() => {
+      .then((res) => {
+        console.log(res)
         if(res==null){
           toast.error("Đăng ký thất bại");
         }

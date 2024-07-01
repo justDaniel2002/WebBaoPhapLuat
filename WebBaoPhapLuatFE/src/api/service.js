@@ -16,7 +16,8 @@ export const postApi = async (url, data = {}, params = "") => {
 };
 
 export const SignUp = async (data) => {
-  await axios.post(signUp, data);
+  const result = await axios.post(signUp, data);
+  return result.data;
 };
 
 export const SignIn = async (data) => {
