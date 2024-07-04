@@ -7,8 +7,11 @@ import {
   get_del_edit_PostById,
 } from "../../api/api";
 import { toast } from "react-toastify";
+import { accountState } from "../../state/AccountState";
+import { useRecoilState } from "recoil";
 
 export default function AddOnePostPage() {
+  const [account, setAccount] = useRecoilState(accountState)
   const [post, setPost] = useState({});
   const [tags, setTags] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -29,8 +32,8 @@ export default function AddOnePostPage() {
 
   const add = () => {
     try {
-       
-       postApi(get_del_edit_PostById, post).then(() => {
+       const addP = {...post, createdBy: account.accountId}
+       postApi(get_del_edit_PostById, addP).then(() => {
         toast.success("Thêm bài đăng thành công")
        });
     } catch (error) {

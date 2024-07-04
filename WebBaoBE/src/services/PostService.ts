@@ -57,7 +57,7 @@ export const addPost = async (post: any) => {
     where: { accountId: aid },
   });
 
-  const isAdmin = account?.roleId == 3;
+  const isAdmin = account?.roleId == 1;
 
   try {
     await prisma.post.create({
