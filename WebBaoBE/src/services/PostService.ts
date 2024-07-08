@@ -11,6 +11,9 @@ export const getAllPost = async () => {
       PostView: true,
       Comment: true,
     },
+    orderBy: {
+      createdDate: 'desc'
+    }
   });
   return posts;
 };

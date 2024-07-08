@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { delApi, getApi, postApi } from "../api/service";
 import { addComment, getComments, get_del_comment } from "../api/api";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../helpers/helpers";
 
 export default function Comments({ commentsState, postId }) {
   const [comments, setComments] = commentsState;
@@ -80,7 +81,7 @@ export default function Comments({ commentsState, postId }) {
               <div>{comment?.Account?.email}</div>
               <div className="text-lg font-semibold">{comment?.content}</div>
               <div className="text-sm text-neutral-500">
-                {comment?.createdDate}
+                {formatDate(comment?.createdDate)}
               </div>
               {comment?.accountId == account?.accountId ? (
                 <div

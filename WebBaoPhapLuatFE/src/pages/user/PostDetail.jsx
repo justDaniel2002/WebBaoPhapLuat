@@ -15,6 +15,7 @@ import Comments from "../../components/Comments";
 import { useRecoilState } from "recoil";
 import { accountState } from "../../state/AccountState";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { formatDate } from "../../helpers/helpers";
 
 export default function PostDetail() {
   const [account, setAccount] = useRecoilState(accountState);
@@ -50,7 +51,7 @@ export default function PostDetail() {
         {post?.Category?.categoryName}
       </div>
       <div className="text-2xl font-medium mb-3">{post?.title}</div>
-      <div className="text-neutral-500 mb-3">{post?.createdDate}</div>
+      <div className="text-neutral-500 mb-3">{formatDate(post?.createdDate)}</div>
       <div className="text-neutral-500 flex items-center mb-3">
         <Icon icon="mdi:eye" className="mr-3" /> {post?.PostView?.length ?? 0}
       </div>

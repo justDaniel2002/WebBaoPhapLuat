@@ -12,7 +12,7 @@ import { useRecoilState } from "recoil";
 
 export default function AddOnePostPage() {
   const [account, setAccount] = useRecoilState(accountState)
-  const [post, setPost] = useState({});
+  const [post, setPost] = useState({tagId:1, categoryId: 1});
   const [tags, setTags] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedTag, setSelectedTag] = useState()
@@ -31,6 +31,30 @@ export default function AddOnePostPage() {
   
 
   const add = () => {
+    if(!post?.title||post?.title?.trim() == ""){
+      toast.warning("Thêm tiêu đề")
+      return
+    }
+
+    if(!post?.description||post?.description?.trim() == ""){
+      toast.warning("Thêm mô tỏ")
+      return
+    }
+
+    if(!post?.categoryId||post?.categoryId == ""){
+      toast.warning("Chọn chủ đề cho bài viết")
+      return
+    }
+
+    if(!post?.tagId||post?.tagId == ""){
+      toast.warning("Chọn tag cho bài viết")
+      return
+    }
+
+    if(!post?.content||post?.content?.trim() == ""){
+      toast.warning("Thêm nội dung")
+      return
+    }
     try {
        const addP = {...post, createdBy: account.accountId}
        postApi(get_del_edit_PostById, addP).then(() => {
