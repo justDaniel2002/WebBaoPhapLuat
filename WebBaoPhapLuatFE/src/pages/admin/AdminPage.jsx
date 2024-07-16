@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { accountState } from "../../state/AccountState";
 export default function AdminPage() {
+  const [search, setSearch] = useState("")
   const [account, setAccount] = useRecoilState(accountState);
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
@@ -24,9 +25,9 @@ export default function AdminPage() {
   const getData = useCallback(() => {
     getApi(getPosts).then((res) => setPosts(res));
     getApi(getStaticInfo).then((res) => setStatic(res));
-  })
+  });
   useEffect(() => {
-    getData()
+    getData();
   }, []);
 
   const deletePost = (id) => {
@@ -39,29 +40,28 @@ export default function AdminPage() {
   };
 
   const browsePost = (id) => {
-    putApi(changePostStatus, {}, id).then(
-      () => {
-        getData();
-        toast.success("Đã duyệt thành công");
-      }
-    )
-  }
+    putApi(changePostStatus, {}, id).then(() => {
+      getData();
+      toast.success("Đã duyệt thành công");
+    });
+  };
   return (
     <div className="pt-20 px-10">
       <div className="flex justify-around mb-20 font-medium text-white">
         <div className="w-1/4 px-5">
-        <div className="px-10 py-10 rounded-md border bg-slate-500">
-          <div>
-            Bài viết: {staticInf?.posts}
-            <hr className="my-5" />
-            <div>Bài viết đã duyệt: {staticInf?.browsedPosts}</div>
+          <div className="px-10 py-10 rounded-md border bg-slate-500">
             <div>
-              Bài viết chưa duyệt: {staticInf?.posts - staticInf?.browsedPosts}
+              Bài viết: {staticInf?.posts}
+              <hr className="my-5" />
+              <div>Bài viết đã duyệt: {staticInf?.browsedPosts}</div>
+              <div>
+                Bài viết chưa duyệt:{" "}
+                {staticInf?.posts - staticInf?.browsedPosts}
+              </div>
             </div>
           </div>
         </div>
-        </div>
-       
+
         <div className="w-1/4 px-5">
           <div className="px-10 py-10 rounded-md border bg-slate-500">
             <div>Tài khoản: {staticInf?.accounts}</div>
@@ -81,13 +81,21 @@ export default function AdminPage() {
         </div>
 
         <div className="w-1/4 px-5">
-        <div className="px-10 py-10 rounded-md border bg-slate-500">
-          <div>
-            Lượt xem: {staticInf?.views}
-            <hr className="my-5" />
+          <div className="px-10 py-10 rounded-md border bg-slate-500">
+            <div>
+              Lượt xem: {staticInf?.views}
+              <hr className="my-5" />
+            </div>
           </div>
         </div>
-        </div>
+      </div>
+      <div className="">
+        <input
+          placeholder="Tiêu đề"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          className="my-5 border border-neutral-500 rounded-md px-3 py-1 w-2/6"
+        />
       </div>
       {account?.roleId == 1 && (
         <div className="flex items-center font-medium mb-5">
@@ -114,7 +122,7 @@ export default function AdminPage() {
           <>
             {" "}
             {posts
-              .filter((p) => p.status)
+              .filter((p) => p.status&&p?.title?.includes(search))
               .map((post) => (
                 <div className="hover:-translate-y-5 transition-all rounded-xl border w-3/12 pb-3 shadow-2xl mr-5 mb-10 flex flex-col justify-between">
                   <img className="mb-5" src={post?.imageURL ?? logo} />
@@ -154,7 +162,7 @@ export default function AdminPage() {
         ) : section == "BDCDD" ? (
           <>
             {posts
-              .filter((p) => !p.status)
+              .filter((p) => !p.status&&p?.title?.includes(search))
               .map((post) => (
                 <div className="hover:-translate-y-5 transition-all rounded-xl border w-3/12 pb-3 shadow-2xl mr-5 mb-10 flex flex-col justify-between">
                   <img className="mb-5" src={post?.imageURL ?? logo} />
@@ -184,9 +192,7 @@ export default function AdminPage() {
                       </button>
 
                       <button
-                        onClick={() => browsePost(post?.postId)
-                          
-                        }
+                        onClick={() => browsePost(post?.postId)}
                         className="hover:font-bold transition-all rounded-3xl px-5 py-1 border font-thin text-green-600 mr-3 mt-2"
                       >
                         Duyệt

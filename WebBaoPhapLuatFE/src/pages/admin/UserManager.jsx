@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 
 export default function UserManager() {
   const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("")
 
   const getUser = useCallback(() => {
     getApi(getUsers).then((result) => setUsers(result));
@@ -38,10 +39,13 @@ export default function UserManager() {
   }, []);
   return (
     <div className="pt-40 px-20">
+      <div className="">
+        <input placeholder="Email người dùng" value={search} onChange={(event) => setSearch(event.target.value)} className="my-5 border border-neutral-500 rounded-md px-3 py-1 w-2/6"/>
+      </div>
       <Table
         ActionTd={ActionTd}
         headers={userManagerHeader}
-        datas={users}
+        datas={users.filter(user => user?.email?.includes(search))}
       ></Table>
     </div>
   );

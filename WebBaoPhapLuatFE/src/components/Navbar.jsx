@@ -50,7 +50,7 @@ export const Navbar = () => {
   };
   return (
     <>
-      <div className="px-40">
+      <div className="px-20">
         <Link to={"/"}>
           <img src={logo} />
         </Link>
@@ -117,7 +117,7 @@ export const Navbar = () => {
 
         <div className="relative w-full h-0"></div>
       </div>
-      <div className="flex mb-7 justify-between px-40">
+      <div className="flex mb-7 justify-between px-20">
         {categories.map((cate) => (
           <img
             onClick={() => navigate(`/PostByCate/${cate?.categoryId}`)}

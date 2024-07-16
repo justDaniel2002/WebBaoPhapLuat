@@ -5,6 +5,7 @@ import { Table, commentManagerHeader } from "../../components/Table";
 import { useLocation, useNavigate } from "react-router-dom";
 export default function CommentManager() {
   const [comments, setComments] = useState([]);
+  const [search, setSearch] = useState("")
 
   const getComts = useCallback(() => {
     getApi(getComments).then((res) => setComments(res));
@@ -35,7 +36,15 @@ export default function CommentManager() {
   </td>), []);
   return (
     <div className="py-40 px-20">
-      <Table datas={comments} headers={commentManagerHeader} ActionTd={ActionTd}/>
+      <div className="">
+        <input
+          placeholder="Nội dung"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          className="my-5 border border-neutral-500 rounded-md px-3 py-1 w-2/6"
+        />
+      </div>
+      <Table datas={comments.filter(c => c?.content?.includes(search))} headers={commentManagerHeader} ActionTd={ActionTd}/>
     </div>
   );
 }

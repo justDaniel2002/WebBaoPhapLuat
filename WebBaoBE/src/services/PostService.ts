@@ -111,6 +111,11 @@ export const deletePost = async (id: number) => {
     //     postId: id
     //   }
     // })
+    await prisma.postView.deleteMany({
+      where: {
+        postId: id,
+      },
+    });
     await prisma.comment.deleteMany({
       where: {
         postId: id,
