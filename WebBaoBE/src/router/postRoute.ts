@@ -13,6 +13,7 @@ import {
   getPostsByAuthor,
   getPtById,
   getStatisticInformation,
+  getViewByTime,
   handleExcelFileRequest,
   updatePost,
 } from "../controllers/PostsController";
@@ -41,6 +42,8 @@ postRoute.route("/upload").post(upload.single("file"), handleExcelFileRequest);
 postRoute.route("/favor").put(changeFavorPost);
 
 postRoute.route("/view").post(addView);
+
+postRoute.route("/view/:time").get(getViewByTime);
 
 postRoute.route("/static").get(getStatisticInformation);
 

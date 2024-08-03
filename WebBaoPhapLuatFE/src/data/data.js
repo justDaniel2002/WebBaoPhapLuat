@@ -74,6 +74,10 @@ export const MenuAdmin = [
     content: "Các bài đã tạo",
     link: "createdPost",
   },
+  {
+    content: "Thống kê",
+    link: "dashboard",
+  },
 ];
 
 export const MenuManager = [

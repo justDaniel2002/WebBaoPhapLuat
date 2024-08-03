@@ -18,13 +18,13 @@ export default function AdminPage() {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [staticInf, setStatic] = useState();
+  
   const [section, setSection] = useState("BDDDD");
   let selectedDeletePostId = useRef();
 
   const getData = useCallback(() => {
     getApi(getPosts).then((res) => setPosts(res));
-    getApi(getStaticInfo).then((res) => setStatic(res));
+    
   });
   useEffect(() => {
     getData();
@@ -47,48 +47,6 @@ export default function AdminPage() {
   };
   return (
     <div className="pt-20 px-10">
-      <div className="flex justify-around mb-20 font-medium text-white">
-        <div className="w-1/4 px-5">
-          <div className="px-10 py-10 rounded-md border bg-slate-500">
-            <div>
-              Bài viết: {staticInf?.posts}
-              <hr className="my-5" />
-              <div>Bài viết đã duyệt: {staticInf?.browsedPosts}</div>
-              <div>
-                Bài viết chưa duyệt:{" "}
-                {staticInf?.posts - staticInf?.browsedPosts}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="w-1/4 px-5">
-          <div className="px-10 py-10 rounded-md border bg-slate-500">
-            <div>Tài khoản: {staticInf?.accounts}</div>
-            <hr className="my-5" />
-            <div>Người dùng: {staticInf?.users}</div>
-            <div>
-              Người thuộc quản lý: {staticInf?.accounts - staticInf?.users}
-            </div>
-          </div>
-        </div>
-
-        <div className="w-1/4 px-5">
-          <div className="px-10 py-10 rounded-md border bg-slate-500">
-            <div>Comment: {staticInf?.comments}</div>
-            <hr className="my-5" />
-          </div>
-        </div>
-
-        <div className="w-1/4 px-5">
-          <div className="px-10 py-10 rounded-md border bg-slate-500">
-            <div>
-              Lượt xem: {staticInf?.views}
-              <hr className="my-5" />
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="">
         <input
           placeholder="Tiêu đề"

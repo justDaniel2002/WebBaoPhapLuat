@@ -12,8 +12,8 @@ export const getAllPost = async () => {
       Comment: true,
     },
     orderBy: {
-      createdDate: 'desc'
-    }
+      createdDate: "desc",
+    },
   });
   return posts;
 };
@@ -111,6 +111,11 @@ export const deletePost = async (id: number) => {
     //     postId: id
     //   }
     // })
+    await prisma.favoritePost.deleteMany({
+      where: {
+        postId: id,
+      },
+    });
     await prisma.postView.deleteMany({
       where: {
         postId: id,
@@ -135,7 +140,7 @@ export const getPostsByInnerTag = async (innerTagId: number) => {
   const posts = await prisma.post.findMany({
     where: {
       innerTagId,
-      status: true
+      status: true,
     },
     include: {
       Category: true,
@@ -151,7 +156,7 @@ export const getPostByCategory = async (categoryId: number) => {
   const posts = await prisma.post.findMany({
     where: {
       categoryId,
-      status: true
+      status: true,
     },
     include: {
       Category: true,
@@ -166,7 +171,7 @@ export const getPostByTag = async (tagId: number) => {
   const posts = await prisma.post.findMany({
     where: {
       tagId,
-      status: true
+      status: true,
     },
     include: {
       Category: true,
@@ -180,7 +185,7 @@ export const getPostByTag = async (tagId: number) => {
 
 export const getPostByTitle = async (title: string) => {
   let posts = await prisma.post.findMany();
-  posts = posts.filter((p) => p.title?.includes(title)&&p.status);
+  posts = posts.filter((p) => p.title?.includes(title) && p.status);
   return posts;
 };
 
@@ -234,34 +239,77 @@ export const changePostStatus = async (postId: number) => {
   });
 };
 
-export const getAllFavorPosts = async (accountId:number) => {
+export const getAllFavorPosts = async (accountId: number) => {
   const favorPosts = await prisma.post.findMany({
-    where:{
-      FavoritePost:{
-        some:{
-          accountId
-        }
-      }
-    }
-  })
+    where: {
+      FavoritePost: {
+        some: {
+          accountId,
+        },
+      },
+    },
+  });
 
   return favorPosts;
-}
+};
 
-export const getStaticInfo = async() => {
-  const posts = await prisma.post.findMany()
-  const comments = await prisma.comment.findMany()
-  const accounts = await prisma.account.findMany()
-  const postView = await prisma.postView.findMany()
+export const getStaticInfo = async () => {
+  const posts = await prisma.post.findMany();
+  const comments = await prisma.comment.findMany();
+  const accounts = await prisma.account.findMany();
+  const postView = await prisma.postView.findMany();
 
   return {
     posts: posts.length,
-    browsedPosts: posts.filter(p => p.status).length,
+    browsedPosts: posts.filter((p) => p.status).length,
     comments: comments.length,
     accounts: accounts.length,
-    users: accounts.filter(a => a.roleId==3).length,
-    views: postView.length
-  }
+    users: accounts.filter((a) => a.roleId == 3).length,
+    views: postView.length,
+  };
+};
+
+export const getViewLast7days = async () => {
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  const recentPostViews = await prisma.postView.findMany({
+    where: {
+      viewDate: {
+        gte: sevenDaysAgo,
+      },
+    },
+  });
+
+  return recentPostViews;
+};
+
+export const getViewLast30days = async () => {
+  const ThrityDaysAgo = new Date();
+  ThrityDaysAgo.setDate(ThrityDaysAgo.getDate() - 30);
+
+  const recentPostViews = await prisma.postView.findMany({
+    where: {
+      viewDate: {
+        gte: ThrityDaysAgo,
+      },
+    },
+  });
+
+  return recentPostViews;
+};
+
+export async function getPostViewsLastYear() {
+  const twelveMonthsAgo = new Date();
+  twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+
+  const postViewsLastYear = await prisma.postView.findMany({
+    where: {
+      viewDate: {
+        gte: twelveMonthsAgo,
+      },
+    },
+  });
+
+  return postViewsLastYear;
 }
-
-

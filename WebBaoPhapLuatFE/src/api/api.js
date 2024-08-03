@@ -13,6 +13,7 @@ export const favorPosts = `${getPosts}/favor`
 export const get_putFavorPosts = `${getPosts}/favor/`
 export const changePostStatus = `${getPosts}/browse/`
 export const getStaticInfo = `${getPosts}/static`
+export const getView = `${getPosts}/view`
 
 export const getCategories = `${host}/categories`
 export const getCategoryById = `${host}/categories/`

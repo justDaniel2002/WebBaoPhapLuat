@@ -29,6 +29,7 @@ import AddOnePostPage from "./pages/admin/AddOnePostPage";
 import FavorPost from "./pages/user/FavorPost";
 import UserManager from "./pages/admin/UserManager";
 import CommentManager from "./pages/admin/CommentManager";
+import Dashboard from "./pages/admin/Dashboard";
 
 function App() {
   const router = createBrowserRouter(
@@ -47,6 +48,7 @@ function App() {
           <Route path="createdPost" element={<CreatedPostPage />} />
           <Route path="commentManager" element={<CommentManager />} />
           <Route path="createdPost/EditPost/:id" element={<EditPostPage />} />
+          <Route path="dashboard" element={<Dashboard />} />
         </Route>
 
         <Route element={<MainLayout />}>
