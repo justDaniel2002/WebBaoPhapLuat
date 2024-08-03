@@ -50,7 +50,7 @@ export const Navbar = () => {
   };
   return (
     <>
-      <div className="px-20">
+      <div className="px-80">
         <Link to={"/"}>
           <img src={logo} />
         </Link>
