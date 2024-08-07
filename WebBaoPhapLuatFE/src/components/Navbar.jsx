@@ -50,12 +50,12 @@ export const Navbar = () => {
   };
   return (
     <>
-      <div className="px-80">
+      <div className="px-40">
         <Link to={"/"}>
           <img src={logo} />
         </Link>
       </div>
-      <div onMouseLeave={onMouseLeaveMenu} className="my-5 flex justify-around shadow-xl items-center text-red-500 text-3xl px-20 flex-wrap">
+      <div onMouseLeave={onMouseLeaveMenu} className="my-5 flex justify-around shadow-xl items-center text-red-500 text-3xl px-40 flex-wrap">
         <Icon icon="ic:twotone-home" onClick={() => navigate(`/`)} />
         {tags.map((tag) => (
           <>
@@ -117,7 +117,7 @@ export const Navbar = () => {
 
         <div className="relative w-full h-0"></div>
       </div>
-      <div className="flex mb-7 justify-between px-20">
+      <div className="flex mb-7 justify-between px-40">
         {categories.map((cate) => (
           <img
             onClick={() => navigate(`/PostByCate/${cate?.categoryId}`)}

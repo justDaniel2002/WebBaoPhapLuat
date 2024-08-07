@@ -27,7 +27,7 @@ export const MainLayout = () => {
 
       <Navbar />
 
-      <div className="px-20">
+      <div className="px-40">
         <Outlet />
         {Chat}
         <button
